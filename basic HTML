@@ -1,0 +1,41 @@
+Aim:To design a simple HTML webpage and apply CSS styling to the heading and paragraph elements.
+
+Algorithm:Create an HTML file.
+Add the required personal details using <h1> and <p> tags.
+Create a CSS file.
+Set the <h1> text color to dark blue.
+Set the <p> text color to pink.
+Set the paragraph background color to black.
+Link the CSS file with the HTML file.
+Open the HTML file in a web browser and view the output.
+
+code:
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DETAILS</title>
+    <link rel="stylesheet" href="basic.css">
+</head>
+<body>
+    <h1>DETAILS OF ME</h1>
+    <p>Name: THANMAI REDDY</p>
+    <p>Reg no: 192425372</p>
+    <p>Subject code: CSA4303</p>
+    <p>SUBJECT: Internet Programming</p>
+    <p>Department: AIML</p>
+</body>
+</html>
+
+CSS:
+h1
+{
+    color: DarkBlue;
+}
+
+p
+{
+    color: Pink;
+    background-color: Black;
+}
+
+Result:The webpage was created successfully with the required CSS styling.
