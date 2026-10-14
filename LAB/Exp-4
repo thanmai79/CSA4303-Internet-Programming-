@@ -1,0 +1,16 @@
+Aim
+
+To develop an online train reservation system for booking, cancelling, and managing train tickets.
+
+Algorithm
+Start the program.
+Register and log in to the system.
+Search for trains and check seat availability.
+Enter passenger details and book tickets.
+Make payment and generate the ticket with a PNR number.
+Check PNR status and cancel tickets if required.
+Admin manages train details, fares, users, and refunds.
+Stop the program.
+Result
+
+Thus, the online train reservation system was designed to manage train searches, ticket bookings, cancellations, PNR status, and refunds efficiently.
