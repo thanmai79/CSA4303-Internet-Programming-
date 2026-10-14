@@ -1,0 +1,16 @@
+Aim
+
+To develop an online hospital appointment booking system for searching doctors and booking, managing, and cancelling appointments.
+
+Algorithm
+Start the program.
+Register and log in to the system.
+Search for hospitals and doctors by location and specialty.
+Select a doctor and book an appointment.
+View appointment status and history.
+Allow patients to cancel appointments and provide reviews.
+Admin manages doctors, hospitals, appointments, and reports.
+Stop the program.
+Result
+
+Thus, the online hospital appointment booking system was designed to manage doctor searches, patient appointments, and hospital details efficiently.
