@@ -1,0 +1,16 @@
+Aim
+
+To develop an online library management system for managing books, issuing and returning books, and calculating fines.
+
+Algorithm
+Start the program.
+Register and log in to the system.
+Search for books and study materials.
+Admin adds, updates, or deletes books.
+Issue books to students and update return status.
+Calculate fines for overdue books.
+Users view borrowing history, fines, and download materials.
+Stop the program.
+Result
+
+Thus, the online library management system was designed to manage books, student records, book issuing and returning, and fine calculations efficiently.
