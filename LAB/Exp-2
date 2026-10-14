@@ -1,0 +1,16 @@
+Aim
+
+To develop an online hotel booking system for searching, booking, modifying, and cancelling hotel room reservations.
+
+Algorithm
+Start the program.
+Register and log in to the system.
+Search for hotels and check room availability.
+Select a room, enter guest details, and book the room.
+Make payment and receive booking confirmation.
+Allow users to view, modify, or cancel bookings.
+Admin manages rooms, prices, bookings, and hotel details.
+Stop the program.
+Result
+
+Thus, the online hotel room booking system was designed to manage room availability, reservations, payments, and cancellations efficiently.
