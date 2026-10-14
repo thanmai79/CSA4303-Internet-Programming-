@@ -1,0 +1,16 @@
+Aim
+
+To develop an online flight reservation system for searching, booking, cancelling, and managing flight tickets.
+
+Algorithm
+Start the program.
+Register and log in to the system.
+Search for flights and check seat availability.
+Select a flight, enter passenger details, and book tickets.
+Make payment and receive the e-ticket.
+View booking status, print tickets, or cancel bookings.
+Admin manages flights, users, feedback, and reports.
+Stop the program.
+Result
+
+Thus, the online flight reservation system was designed to manage flight searches, ticket bookings, payments, cancellations, and reports efficiently.
