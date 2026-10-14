@@ -1,0 +1,16 @@
+Aim
+
+To develop an online bus ticket booking system for booking, cancelling, and managing bus tickets.
+
+Algorithm
+Start the program.
+Register and log in to the system.
+Search for buses and check seat availability.
+Select seats and book tickets.
+Make payment and receive booking confirmation.
+Allow users to cancel tickets and post comments.
+Admin manages buses, users, and reports.
+Stop the program.
+Result
+
+Thus, the online bus ticket booking system was designed to manage bus details, ticket bookings, cancellations, and reports efficiently.
