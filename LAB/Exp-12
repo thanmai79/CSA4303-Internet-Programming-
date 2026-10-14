@@ -1,0 +1,16 @@
+Aim
+
+To develop an online insurance management system for managing policies, customers, agents, and premium payment reminders.
+
+Algorithm
+Start the program.
+Register and log in to the system.
+Allow agents to register and get admin approval.
+Agents add customers and manage policy details.
+Users view and manage their insurance policies.
+Send SMS alerts for premium payments and due dates.
+Admin manages agents and monitors their details.
+Stop the program.
+Result
+
+Thus, the online insurance management system was designed to manage insurance policies, customer records, agent details, and premium payment reminders efficiently.
