@@ -1,0 +1,420 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgriMart - Farm to Home</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f5f7f3;color:#24352b}
+:root{--green:#176b3a;--dark:#104c2b;--gold:#ffc857}
+button{padding:10px 15px;border:0;border-radius:6px;cursor:pointer;font-size:14px}
+input,select,textarea{padding:11px;border:1px solid #ccd6ce;border-radius:6px;width:100%;font:inherit}
+label{font-weight:bold;font-size:14px}
+header{background:var(--green);color:white;padding:17px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-size:26px;font-weight:bold;cursor:pointer}
+.logo span{color:var(--gold)}
+.header-buttons{display:flex;gap:8px;flex-wrap:wrap}
+.header-buttons button{background:white;color:var(--green)}
+nav{background:white;padding:14px 5%;display:flex;gap:20px;flex-wrap:wrap;border-bottom:1px solid #ddd}
+nav a{color:var(--dark);text-decoration:none;font-weight:bold;cursor:pointer}
+nav a:hover{color:#e09b00}
+main{max-width:1200px;min-height:70vh;margin:auto;padding:25px 18px}
+button.green{background:var(--green);color:white}
+button.light{background:#e5f0e7;color:var(--dark)}
+button.red{background:#ffe4e4;color:#a51e1e}
+.hero{background:linear-gradient(120deg,#124f2d,#3b9854);color:white;padding:45px 30px;border-radius:14px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.hero h1{font-size:clamp(29px,4vw,44px);margin-bottom:15px}
+.hero p{line-height:1.7;max-width:600px}
+.hero button{background:var(--gold);color:#183d25;margin-top:20px;font-weight:bold}
+.hero-icon{font-size:85px}
+.heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:27px 0 17px}
+.heading h2{color:var(--dark)}
+.categories,.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:17px}
+.category{background:white;padding:20px 10px;text-align:center;border-radius:10px;cursor:pointer;box-shadow:0 2px 8px #0000000b}
+.category div{font-size:38px;margin-bottom:10px}
+.card,.panel{background:white;border-radius:10px;box-shadow:0 2px 10px #0000000b;overflow:hidden}
+.product-image{height:150px;background:#eaf4e9;display:flex;align-items:center;justify-content:center;font-size:65px}
+.card-body{padding:16px}
+.card-body h3{margin:10px 0}
+.card-body p{font-size:14px;color:#66756b;line-height:1.6;margin:7px 0}
+.price{color:var(--green);font-size:20px;font-weight:bold;margin:12px 0}
+.badge{display:inline-block;background:#e7f4e9;color:var(--green);border-radius:20px;padding:5px 9px;font-size:12px}
+.card-buttons,.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.card-buttons button{flex:1}
+.panel{padding:22px;margin-bottom:18px}
+.panel h3{margin-bottom:12px}
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:15px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.toolbar{display:flex;gap:10px;margin:18px 0;flex-wrap:wrap}
+.toolbar input{flex:1;min-width:200px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:15px;margin:20px 0}
+.stat{background:white;padding:20px;border-left:4px solid var(--green);border-radius:8px}
+.stat p{color:#66756b;font-size:14px}
+.stat h2{color:var(--green);margin-top:10px}
+table{border-collapse:collapse;width:100%;min-width:580px}
+th,td{padding:13px;text-align:left;border-bottom:1px solid #e4e9e4}
+th{background:#eaf4eb;color:var(--dark)}
+.table-wrap{overflow-x:auto}
+.empty{text-align:center;background:white;padding:35px;border-radius:10px}
+.empty h2,.empty h3{margin:12px}
+.notice{padding:12px;background:#fff4d9;color:#725100;border-radius:7px;margin:12px 0;line-height:1.6}
+.modal-bg{position:fixed;inset:0;background:#0009;display:flex;justify-content:center;align-items:center;padding:15px;z-index:10;overflow-y:auto}
+.modal{background:white;width:100%;max-width:460px;padding:25px;border-radius:12px;max-height:95vh;overflow:auto}
+.modal-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.modal-title h2{color:var(--dark)}
+.small{font-size:12px;color:#66756b;margin-top:10px;line-height:1.5}
+.hidden{display:none!important}
+footer{background:#103e25;color:white;padding:25px 5%;margin-top:30px;line-height:1.8}
+footer div{max-width:1200px;margin:auto}
+@media(max-width:600px){header{padding:14px}main{padding:18px 12px}.hero{padding:28px 20px}.hero-icon{font-size:55px}nav{gap:12px}.hero h1{font-size:29px}}
+</style>
+</head>
+
+<body>
+<header>
+<div class="logo" onclick="home()">🌱 Agri<span>Mart</span></div>
+<div class="header-buttons">
+<button onclick="cartPage()">🛒 Cart (<span id="cartCount">0</span>)</button>
+<button onclick="auth('login')">Login</button>
+<button onclick="auth('register')">Register</button>
+</div>
+</header>
+
+<nav>
+<a onclick="home()">Home</a>
+<a onclick="productsPage()">Products</a>
+<a onclick="cartPage()">My Cart</a>
+<a onclick="ordersPage()">My Orders</a>
+<a onclick="auth('farmer')">Farmer Portal</a>
+<a onclick="dashboard()">My Account</a>
+<a id="logoutLink" class="hidden" onclick="logout()">Logout</a>
+</nav>
+
+<main id="app"></main>
+
+<footer>
+<div>
+<h2>🌱 AgriMart</h2>
+<p>Connecting farmers and customers.</p>
+<p>Fresh products directly from the farm to your home.</p>
+<p>© 2026 AgriMart | Internet Programming Project</p>
+</div>
+</footer>
+
+<div id="modal"></div>
+
+<script>
+const app=document.getElementById("app");
+
+const initialProducts=[
+{id:1,name:"Fresh Tomatoes",category:"Vegetables",price:30,unit:"kg",stock:100,farmer:"Ravi Kumar",emoji:"🍅",description:"Fresh farm-grown red tomatoes."},
+{id:2,name:"Organic Potatoes",category:"Vegetables",price:35,unit:"kg",stock:80,farmer:"Lakshmi Farms",emoji:"🥔",description:"Quality potatoes harvested locally."},
+{id:3,name:"Fresh Carrots",category:"Vegetables",price:45,unit:"kg",stock:60,farmer:"Ravi Kumar",emoji:"🥕",description:"Fresh and crunchy carrots."},
+{id:4,name:"Farm Rice",category:"Grains",price:55,unit:"kg",stock:200,farmer:"Green Valley Farm",emoji:"🌾",description:"Quality rice directly from farmers."},
+{id:5,name:"Fresh Apples",category:"Fruits",price:120,unit:"kg",stock:45,farmer:"Hill Farm",emoji:"🍎",description:"Sweet and fresh apples."},
+{id:6,name:"Bananas",category:"Fruits",price:50,unit:"dozen",stock:70,farmer:"Lakshmi Farms",emoji:"🍌",description:"Naturally ripened bananas."},
+{id:7,name:"Fresh Spinach",category:"Vegetables",price:25,unit:"bunch",stock:50,farmer:"Ravi Kumar",emoji:"🥬",description:"Fresh green leafy vegetables."},
+{id:8,name:"Organic Corn",category:"Grains",price:40,unit:"kg",stock:90,farmer:"Green Valley Farm",emoji:"🌽",description:"Fresh corn from the farm."}
+];
+
+function read(key,fallback){
+try{const v=localStorage.getItem(key);return v===null?fallback:JSON.parse(v)}
+catch(e){return fallback}
+}
+
+let products=read("ag_products",initialProducts);
+let users=read("ag_users",[]);
+let cart=read("ag_cart",[]);
+let orders=read("ag_orders",[]);
+let addresses=read("ag_addresses",[]);
+let wallet=read("ag_wallet",1000);
+let currentUser=null;
+let filter="All";
+let search="";
+let editingId=null;
+
+function save(){
+localStorage.setItem("ag_products",JSON.stringify(products));
+localStorage.setItem("ag_users",JSON.stringify(users));
+localStorage.setItem("ag_cart",JSON.stringify(cart));
+localStorage.setItem("ag_orders",JSON.stringify(orders));
+localStorage.setItem("ag_addresses",JSON.stringify(addresses));
+localStorage.setItem("ag_wallet",JSON.stringify(wallet));
+}
+
+function esc(v){
+return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function rupees(v){return "₹"+Number(v).toFixed(2)}
+function updateCart(){
+document.getElementById("cartCount").textContent=cart.reduce((s,c)=>s+c.qty,0);
+}
+function updateNav(){
+document.getElementById("logoutLink").classList.toggle("hidden",!currentUser);
+}
+function home(){filter="All";search="";homePage()}
+
+function homePage(){
+app.innerHTML=`
+<section class="hero">
+<div>
+<h1>Fresh From Our Farms<br>To Your Home 🌱</h1>
+<p>Discover fresh vegetables, fruits and grains directly from farmers. Shop farm-fresh products at fair prices with AgriMart.</p>
+<button onclick="productsPage()">Shop Products →</button>
+<button onclick="auth('register')" style="background:white;margin-left:8px">Join AgriMart</button>
+</div><div class="hero-icon">👨‍🌾🌾</div>
+</section>
+<div class="heading"><h2>Shop by Category</h2></div>
+<div class="categories">
+<div class="category" onclick="chooseCategory('All')"><div>🛒</div><h3>All Products</h3></div>
+<div class="category" onclick="chooseCategory('Vegetables')"><div>🥦</div><h3>Vegetables</h3></div>
+<div class="category" onclick="chooseCategory('Fruits')"><div>🍎</div><h3>Fruits</h3></div>
+<div class="category" onclick="chooseCategory('Grains')"><div>🌾</div><h3>Grains</h3></div>
+</div>
+<div class="heading"><h2>Fresh Products</h2><button class="light" onclick="productsPage()">View All</button></div>
+<div id="featured" class="grid"></div>
+<div class="heading"><h2>Why Choose AgriMart?</h2></div>
+<div class="categories">
+<div class="category"><div>🌱</div><h3>Fresh Produce</h3><p>Quality farm products</p></div>
+<div class="category"><div>🤝</div><h3>Direct Farmers</h3><p>Support local farmers</p></div>
+<div class="category"><div>💰</div><h3>Fair Prices</h3><p>Clear product prices</p></div>
+<div class="category"><div>🚚</div><h3>Order Tracking</h3><p>Track your orders</p></div>
+</div>`;
+renderCards("featured",products.slice(0,4));
+}
+
+function chooseCategory(c){filter=c;search="";productsPage()}
+
+function productsPage(){
+app.innerHTML=`<div class="heading"><h2>All Products</h2></div>
+<div class="toolbar">
+<input id="searchBox" placeholder="Search products..." value="${esc(search)}" oninput="search=this.value;renderFiltered()">
+<select id="categoryBox" onchange="filter=this.value;renderFiltered()">
+${["All","Vegetables","Fruits","Grains","Other"].map(c=>`<option ${filter===c?"selected":""}>${c}</option>`).join("")}
+</select>
+</div><div id="allProducts" class="grid"></div>`;
+renderFiltered();
+}
+function renderFiltered(){
+const el=document.getElementById("allProducts");if(!el)return;
+const found=products.filter(p=>(filter==="All"||p.category===filter)&&(`${p.name} ${p.category} ${p.farmer}`.toLowerCase().includes(search.toLowerCase())));
+renderCards("allProducts",found);
+}
+function renderCards(id,list){
+const el=document.getElementById(id);if(!el)return;
+if(!list.length){el.innerHTML='<div class="empty">No products found.</div>';return}
+el.innerHTML=list.map(p=>`
+<div class="card">
+<div class="product-image">${esc(p.emoji)}</div>
+<div class="card-body">
+<span class="badge">${esc(p.category)}</span>
+<h3>${esc(p.name)}</h3>
+<p>${esc(p.description)}</p>
+<p>Farmer: ${esc(p.farmer)}</p>
+<p>Stock: ${p.stock} ${esc(p.unit)}</p>
+<div class="price">${rupees(p.price)} / ${esc(p.unit)}</div>
+<div class="card-buttons">
+<button class="green" onclick="addCart(${p.id})">Add to Cart</button>
+<button class="light" onclick="details(${p.id})">Details</button>
+</div></div></div>`).join("");
+}
+function details(id){
+const p=products.find(x=>x.id===id);if(!p)return;
+document.getElementById("modal").innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal">
+<div class="modal-title"><h2>Product Details</h2><button class="light" onclick="closeModal()">✕</button></div>
+<div style="font-size:65px;text-align:center">${esc(p.emoji)}</div>
+<h3>${esc(p.name)}</h3><p>${esc(p.description)}</p>
+<p style="margin-top:10px">Category: ${esc(p.category)}</p><p>Farmer: ${esc(p.farmer)}</p>
+<p>Stock: ${p.stock} ${esc(p.unit)}</p><div class="price">${rupees(p.price)} / ${esc(p.unit)}</div>
+<button class="green" onclick="closeModal();addCart(${p.id})">Add to Cart</button>
+</div></div>`;
+}
+function closeModal(){document.getElementById("modal").innerHTML=""}
+
+function addCart(id){
+const p=products.find(x=>x.id===id);if(!p)return;
+let item=cart.find(x=>x.id===id);
+if(p.stock<1){alert("Out of stock.");return}
+if(item){if(item.qty>=p.stock){alert("Stock limit reached.");return}item.qty++}
+else cart.push({id,qty:1});
+save();updateCart();alert("Added to cart successfully.");
+}
+function cartPage(){
+if(!cart.length){
+app.innerHTML=`<div class="empty"><div style="font-size:55px">🛒</div><h2>Your Cart Is Empty</h2><button class="green" onclick="productsPage()">Shop Now</button></div>`;return;
+}
+let rows=cart.map(c=>({...c,p:products.find(p=>p.id===c.id)})).filter(c=>c.p);
+let total=rows.reduce((s,c)=>s+c.p.price*c.qty,0);
+app.innerHTML=`<div class="heading"><h2>My Shopping Cart</h2></div>
+<div class="panel"><div class="table-wrap"><table>
+<tr><th>Product</th><th>Price</th><th>Quantity</th><th>Total</th><th>Action</th></tr>
+${rows.map(c=>`<tr><td>${esc(c.p.emoji)} ${esc(c.p.name)}</td><td>${rupees(c.p.price)}</td>
+<td><button class="light" onclick="changeQty(${c.id},-1)">−</button> ${c.qty} <button class="light" onclick="changeQty(${c.id},1)">+</button></td>
+<td>${rupees(c.p.price*c.qty)}</td><td><button class="red" onclick="removeCart(${c.id})">Remove</button></td></tr>`).join("")}
+</table></div><div style="text-align:right;margin-top:20px"><h2>Total: ${rupees(total)}</h2>
+<button class="light" onclick="productsPage()">Continue Shopping</button> <button class="green" onclick="checkout()">Checkout</button></div></div>`;
+}
+function changeQty(id,d){
+const c=cart.find(x=>x.id===id),p=products.find(x=>x.id===id);if(!c||!p)return;
+if(d>0&&c.qty>=p.stock){alert("Stock limit reached.");return}
+c.qty+=d;if(c.qty<=0)cart=cart.filter(x=>x.id!==id);
+save();updateCart();cartPage();
+}
+function removeCart(id){cart=cart.filter(x=>x.id!==id);save();updateCart();cartPage()}
+
+function checkout(){
+if(!currentUser){alert("Please log in first.");auth("login");return}
+if(currentUser.role!=="customer"){alert("Log in using a customer account to order.");return}
+const total=cart.reduce((s,c)=>{const p=products.find(x=>x.id===c.id);return s+(p?p.price*c.qty:0)},0);
+if(!cart.length){alert("Your cart is empty.");return}
+app.innerHTML=`<div class="heading"><h2>Checkout</h2></div><div class="panel">
+<div class="field"><label>Full Name</label><input id="shipName" value="${esc(currentUser.name)}"></div>
+<div class="field"><label>Mobile Number</label><input id="shipPhone" value="${esc(currentUser.phone)}"></div>
+<div class="field"><label>Delivery Address</label><textarea id="shipAddress">${esc(addresses[0]||currentUser.address||"")}</textarea></div>
+<div class="field"><label>Payment Method</label><select id="payMethod"><option value="COD">Cash on Delivery (Demo)</option><option value="wallet">AgriMart Wallet (Demo)</option></select></div>
+<div class="notice">This demo does not collect real payments.</div><h2>Total: ${rupees(total)}</h2>
+<button class="green" onclick="placeOrder()">Place Order</button> <button class="light" onclick="cartPage()">Back to Cart</button></div>`;
+}
+function placeOrder(){
+const name=document.getElementById("shipName").value.trim(),phone=document.getElementById("shipPhone").value.trim(),address=document.getElementById("shipAddress").value.trim(),method=document.getElementById("payMethod").value;
+if(!name||!phone||!address){alert("Fill in all delivery details.");return}
+for(const c of cart){const p=products.find(x=>x.id===c.id);if(!p||p.stock<c.qty){alert("Insufficient stock for a product.");return}}
+const total=cart.reduce((s,c)=>s+products.find(p=>p.id===c.id).price*c.qty,0);
+if(method==="wallet"&&wallet<total){alert("Insufficient demo wallet balance.");return}
+if(method==="wallet")wallet-=total;
+const order={id:"AG"+Date.now().toString().slice(-7),name,email:currentUser.email,phone,address,items:cart.map(c=>({...c})),total,status:"Order Placed",shipping:"Not Shipped",payment:method==="wallet"?"Wallet (Demo)":"Cash on Delivery (Demo)",date:new Date().toLocaleString()};
+cart.forEach(c=>products.find(p=>p.id===c.id).stock-=c.qty);
+orders.unshift(order);addresses=[address,...addresses.filter(a=>a!==address)];cart=[];save();updateCart();
+app.innerHTML=`<div class="empty"><div style="font-size:60px">✅</div><h2>Order Placed Successfully!</h2><p>Order ID: ${order.id}</p><p style="margin:12px">Total: ${rupees(total)}</p><button class="green" onclick="ordersPage()">View Orders</button></div>`;
+}
+
+function ordersPage(){
+if(!currentUser){alert("Please log in first.");auth("login");return}
+let list=orders.filter(o=>currentUser.role==="customer"?o.email===currentUser.email:o.items.some(i=>{const p=products.find(x=>x.id===i.id);return p&&p.farmer===currentUser.name}));
+app.innerHTML=`<div class="heading"><h2>${currentUser.role==="farmer"?"Manage Customer Orders":"My Orders"}</h2></div>
+${list.length?list.map(o=>`<div class="panel"><div class="heading"><h3>Order ${esc(o.id)}</h3><span class="badge">${esc(o.status)}</span></div>
+<p>Customer: ${esc(o.name)}</p><p>Date: ${esc(o.date)}</p><p>Address: ${esc(o.address)}</p><p>Payment: ${esc(o.payment)}</p><p>Shipping: <b>${esc(o.shipping)}</b></p>
+<div style="margin:12px 0">${o.items.map(i=>{const p=products.find(x=>x.id===i.id);return `<p>${p?esc(p.name):"Product"} × ${i.qty}</p>`}).join("")}</div>
+<h3>Total: ${rupees(o.total)}</h3>
+${currentUser.role==="farmer"?`<div class="actions"><select id="status${o.id}"><option>Order Placed</option><option>Confirmed</option><option>Packed</option><option>Cancelled</option></select><button class="green" onclick="updateStatus('${o.id}')">Update Status</button>
+<select id="ship${o.id}"><option>Not Shipped</option><option>Shipped</option><option>Out for Delivery</option><option>Delivered</option></select><button class="light" onclick="updateShipping('${o.id}')">Update Shipping</button></div>`:""}</div>`).join(""):`<div class="empty"><h3>No orders found</h3><button class="green" onclick="productsPage()">Shop Now</button></div>`}`;
+}
+function updateStatus(id){const o=orders.find(x=>x.id===id);if(o){o.status=document.getElementById("status"+id).value;save();ordersPage()}}
+function updateShipping(id){const o=orders.find(x=>x.id===id);if(o){o.shipping=document.getElementById("ship"+id).value;save();ordersPage()}}
+
+function auth(mode){
+const reg=mode==="register",farmer=mode==="farmer";
+document.getElementById("modal").innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal">
+<div class="modal-title"><h2>${reg?"Create Account":"Login"}</h2><button class="light" onclick="closeModal()">✕</button></div>
+${reg?`<div class="field"><label>Full Name</label><input id="aName" placeholder="Full name"></div><div class="field"><label>Mobile Number</label><input id="aPhone" type="tel" placeholder="Mobile number"></div>`:""}
+<div class="field"><label>Email Address</label><input id="aEmail" type="email" placeholder="Email address"></div>
+${reg?`<div class="field"><label>Address</label><textarea id="aAddress" placeholder="Full address"></textarea></div>`:""}
+<div class="field"><label>Account Type</label><select id="aRole">${reg?`<option value="customer">Customer</option><option value="farmer">Farmer</option>`:`<option value="${farmer?"farmer":"customer"}">${farmer?"Farmer":"Customer"}</option><option value="${farmer?"customer":"farmer"}">${farmer?"Customer":"Farmer"}</option>`}</select></div>
+<div class="field"><label>Password</label><input id="aPassword" type="password" placeholder="Password"></div>
+${reg?`<div class="field"><label>Confirm Password</label><input id="aConfirm" type="password" placeholder="Confirm password"></div>`:""}
+<button class="green" onclick="submitAuth('${mode}')">${reg?"Register":"Login"}</button>
+<p style="margin-top:15px">${reg?"Already have an account?":"New to AgriMart?"} <a href="#" onclick="event.preventDefault();auth('${reg?"login":"register"}')">${reg?"Login":"Register"}</a></p>
+<p class="small">No OTP verification is required.</p></div></div>`;
+}
+function submitAuth(mode){
+const reg=mode==="register",nameEl=document.getElementById("aName"),phoneEl=document.getElementById("aPhone"),addressEl=document.getElementById("aAddress");
+const name=nameEl?nameEl.value.trim():"",phone=phoneEl?phoneEl.value.trim():"",address=addressEl?addressEl.value.trim():"";
+const email=document.getElementById("aEmail").value.trim().toLowerCase(),password=document.getElementById("aPassword").value,role=document.getElementById("aRole").value;
+if(!email||!password){alert("Enter your email and password.");return}
+if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){alert("Enter a valid email address.");return}
+if(reg){
+if(!name||!phone||!address){alert("Complete all registration details.");return}
+if(password.length<6){alert("Password must be at least 6 characters.");return}
+if(password!==document.getElementById("aConfirm").value){alert("Passwords do not match.");return}
+if(users.some(u=>u.email===email)){alert("Email already registered. Please log in.");return}
+users.push({name,phone,address,email,password,role});save();
+alert("Registration successful. Now log in with your email and password.");auth("login");return;
+}
+let user=users.find(u=>u.email===email&&u.password===password&&u.role===role);
+if(!user&&email==="than@gmail.com"&&password==="thanmai7971"&&role==="customer"){
+user={name:"Thanmai",phone:"",address:"",email,password,role};
+if(!users.some(u=>u.email===email)){users.push(user);save()}
+}
+if(!user){alert("Incorrect login details. Please check your email, password and account type.");return}
+currentUser=user;closeModal();updateNav();dashboard();
+}
+
+function dashboard(){
+if(!currentUser){auth("login");return}
+updateNav();
+if(currentUser.role==="farmer"){farmerDashboard();return}
+const mine=orders.filter(o=>o.email===currentUser.email);
+app.innerHTML=`<div class="heading"><h2>Welcome, ${esc(currentUser.name)} 👋</h2><button class="light" onclick="logout()">Logout</button></div>
+<div class="stats"><div class="stat"><p>My Orders</p><h2>${mine.length}</h2></div><div class="stat"><p>Wallet Balance (Demo)</p><h2>${rupees(wallet)}</h2></div><div class="stat"><p>Cart Items</p><h2>${cart.reduce((s,c)=>s+c.qty,0)}</h2></div></div>
+<div class="grid">
+<div class="panel"><h3>🛒 Shop Products</h3><p style="margin:12px 0">Browse fresh farm produce.</p><button class="green" onclick="productsPage()">View Products</button></div>
+<div class="panel"><h3>📦 My Orders</h3><p style="margin:12px 0">Track your orders.</p><button class="green" onclick="ordersPage()">View Orders</button></div>
+<div class="panel"><h3>💰 My Wallet</h3><p style="margin:12px 0">Balance: ${rupees(wallet)}</p><button class="green" onclick="walletPage()">Manage Wallet</button></div>
+<div class="panel"><h3>📍 Addresses</h3><p style="margin:12px 0">Manage delivery addresses.</p><button class="green" onclick="addressPage()">Manage Addresses</button></div>
+</div>`;
+}
+function farmerDashboard(){
+const mine=products.filter(p=>p.farmer===currentUser.name);
+const sales=orders.filter(o=>o.items.some(i=>mine.some(p=>p.id===i.id)));
+app.innerHTML=`<div class="heading"><h2>Farmer Dashboard 🌾</h2><button class="light" onclick="logout()">Logout</button></div>
+<div class="stats"><div class="stat"><p>My Products</p><h2>${mine.length}</h2></div><div class="stat"><p>Orders</p><h2>${sales.length}</h2></div><div class="stat"><p>Sales Value</p><h2>${rupees(sales.reduce((s,o)=>s+o.total,0))}</h2></div></div>
+<div class="panel"><div class="heading"><h3>Manage Products</h3><button class="green" onclick="productForm()">+ Add Product</button></div>
+${mine.length?`<div class="table-wrap"><table><tr><th>Product</th><th>Price</th><th>Stock</th><th>Actions</th></tr>${mine.map(p=>`<tr><td>${esc(p.emoji)} ${esc(p.name)}</td><td>${rupees(p.price)}/${esc(p.unit)}</td><td>${p.stock}</td><td><button class="light" onclick="productForm(${p.id})">Edit</button> <button class="red" onclick="deleteProduct(${p.id})">Delete</button></td></tr>`).join("")}</table></div>`:"<p>You have not added any products yet.</p>"}</div>
+<div class="panel"><h3>Customer Orders</h3><button class="green" onclick="ordersPage()">Manage Orders and Shipping</button></div>
+<div class="panel"><h3>My Sales</h3><p>Orders: ${sales.length}</p><p>Total: ${rupees(sales.reduce((s,o)=>s+o.total,0))}</p></div>`;
+}
+function productForm(id=null){
+editingId=id;const p=id?products.find(x=>x.id===id):null;
+app.innerHTML=`<div class="heading"><h2>${p?"Edit Product":"Add Product"}</h2></div><div class="panel"><div class="form-grid">
+<div class="field"><label>Product Name</label><input id="pName" value="${esc(p?.name||"")}"></div>
+<div class="field"><label>Category</label><select id="pCategory">${["Vegetables","Fruits","Grains","Other"].map(c=>`<option ${p?.category===c?"selected":""}>${c}</option>`).join("")}</select></div>
+<div class="field"><label>Price (₹)</label><input id="pPrice" type="number" min="0.01" step="0.01" value="${p?.price||""}"></div>
+<div class="field"><label>Unit</label><select id="pUnit">${["kg","piece","bunch","dozen","bag"].map(u=>`<option ${p?.unit===u?"selected":""}>${u}</option>`).join("")}</select></div>
+<div class="field"><label>Stock</label><input id="pStock" type="number" min="0" step="1" value="${p?.stock??""}"></div>
+<div class="field"><label>Product Emoji</label><input id="pEmoji" value="${esc(p?.emoji||"🌱")}"></div>
+</div><div class="field"><label>Description</label><textarea id="pDesc">${esc(p?.description||"")}</textarea></div>
+<button class="green" onclick="saveProduct()">Save Product</button> <button class="light" onclick="farmerDashboard()">Cancel</button></div>`;
+}
+function saveProduct(){
+const name=document.getElementById("pName").value.trim(),price=Number(document.getElementById("pPrice").value),stock=Number(document.getElementById("pStock").value);
+if(!name||!Number.isFinite(price)||price<=0||!Number.isInteger(stock)||stock<0){alert("Enter valid product details.");return}
+const p={id:editingId||Date.now(),name,category:document.getElementById("pCategory").value,price,unit:document.getElementById("pUnit").value,stock,emoji:document.getElementById("pEmoji").value.trim()||"🌱",description:document.getElementById("pDesc").value.trim(),farmer:currentUser.name};
+if(editingId)products=products.map(x=>x.id===editingId?p:x);else products.unshift(p);
+save();alert("Product saved.");farmerDashboard();
+}
+function deleteProduct(id){if(!confirm("Delete this product?"))return;products=products.filter(p=>p.id!==id);cart=cart.filter(c=>c.id!==id);save();updateCart();farmerDashboard()}
+function walletPage(){
+app.innerHTML=`<div class="heading"><h2>My Wallet</h2></div><div class="panel"><h2>${rupees(wallet)}</h2><div class="notice">Demo wallet only. No real money is transferred.</div><div class="field"><label>Amount to Add (₹)</label><input id="walletAmount" type="number" min="1"></div><button class="green" onclick="addWallet()">Add Demo Balance</button> <button class="light" onclick="dashboard()">Back</button></div>`;
+}
+function addWallet(){const n=Number(document.getElementById("walletAmount").value);if(!Number.isFinite(n)||n<=0){alert("Enter a valid amount.");return}wallet+=n;save();walletPage()}
+function addressPage(){
+app.innerHTML=`<div class="heading"><h2>Shipping Addresses</h2></div><div class="panel"><div class="field"><label>New Address</label><textarea id="newAddress"></textarea></div><button class="green" onclick="addAddress()">Save Address</button> <button class="light" onclick="dashboard()">Back</button></div><div class="panel"><h3>Saved Addresses</h3>${addresses.length?addresses.map((a,i)=>`<p style="padding:10px 0">${esc(a)} <button class="red" onclick="deleteAddress(${i})">Delete</button></p>`).join(""):"No saved addresses."}</div>`;
+}
+function addAddress(){const a=document.getElementById("newAddress").value.trim();if(!a){alert("Enter an address.");return}addresses.unshift(a);save();addressPage()}
+function deleteAddress(i){addresses.splice(i,1);save();addressPage()}
+function logout(){currentUser=null;updateNav();alert("Logged out successfully.");home()}
+function renderAbout(){
+app.innerHTML=`<section class="hero"><div><h1>About AgriMart 🌱</h1><p>AgriMart is an agricultural marketplace concept connecting farmers with customers. Farmers can list products and manage orders, while customers can shop and track deliveries.</p><button onclick="productsPage()">Explore Products</button></div><div class="hero-icon">🚜</div></section>
+<div class="panel" style="margin-top:20px"><h2>Project Features</h2><p style="line-height:2;margin-top:12px">Customer registration and login<br>Farmer product management<br>Product search and details<br>Shopping cart and checkout<br>Demo wallet<br>Order and shipping tracking</p></div>`;
+}
+
+/* Automatically create the requested demo customer login */
+function setupDemoAccount(){
+users=read("ag_users",[]);
+if(!users.some(u=>u.email==="than@gmail.com")){
+users.push({name:"Thanmai",phone:"",address:"",email:"than@gmail.com",password:"thanmai7971",role:"customer"});
+localStorage.setItem("ag_users",JSON.stringify(users));
+}
+}
+
+setupDemoAccount();
+updateCart();
+updateNav();
+homePage();
+</script>
+</body>
+</html>
+```
