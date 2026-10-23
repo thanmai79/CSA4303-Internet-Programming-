@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VoteOnline - Secure E-Voting</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--c:#1a4fa3;--d:#0d2a5c;--a:#ff9933;--gr:#138808;--bg:#f2f5fb;--b:#d3dcee;--g:#1b7a3d;--r:#b3261e}
+html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{font-family:Arial,sans-serif;background:var(--bg);color:#222;line-height:1.5}
+header{background:var(--d);color:#fff;position:sticky;top:0;z-index:9;border-bottom:4px solid;border-image:linear-gradient(90deg,var(--a) 33%,#fff 33% 66%,var(--gr) 66%) 1}
+.bar{max-width:1150px;margin:auto;padding:10px 15px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px}
+.brand{font-size:22px;font-weight:bold;color:#fff;text-decoration:none}.brand span{color:var(--a)}
+nav{display:flex;flex-wrap:wrap;gap:4px}nav a{color:#fff;text-decoration:none;font-size:13px;padding:6px 10px;border-radius:4px}nav a:hover,nav a.on{background:var(--c)}
+#mb{display:none;background:none;border:1px solid #fff;color:#fff;font-size:20px;padding:2px 10px;border-radius:4px}
+main{max-width:1150px;margin:20px auto;padding:0 15px;min-height:60vh}
+.p{background:#fff;border:1px solid var(--b);border-radius:8px;padding:18px;margin-bottom:18px}
+.p h2{color:var(--d);border-bottom:2px solid var(--c);padding-bottom:5px;margin-bottom:12px;font-size:19px}
+.hero{background:linear-gradient(135deg,var(--d),var(--c));color:#fff;border-radius:8px;padding:22px 18px;margin-bottom:18px;text-align:center}
+.auth{max-width:520px;margin:0 auto}
+label{display:block;font-weight:bold;font-size:13px;margin:9px 0 3px}
+input,select,textarea{width:100%;padding:8px;border:1px solid #b5c0d8;border-radius:4px;font:inherit;font-size:14px}
+input[type=checkbox],input[type=radio]{width:auto}.chk{display:flex;gap:6px;align-items:center;font-weight:normal;margin:3px 0}
+.f{max-width:520px}.row{display:flex;gap:8px;flex-wrap:wrap}.row>div{flex:1;min-width:110px}
+.btn{display:inline-block;background:var(--c);color:#fff;border:0;border-radius:4px;padding:8px 14px;font-size:14px;cursor:pointer;margin:10px 4px 0 0;text-decoration:none}
+.btn:hover{background:var(--d)}.btn.g{background:#666}.btn.r{background:var(--r)}.btn.a{background:var(--gr)}.btn.o{background:var(--a);color:#222}.btn.s{padding:4px 9px;font-size:12px;margin:2px}.btn:disabled{background:#aaa}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.card{border:2px solid var(--b);border-radius:8px;padding:12px;background:#fff}.card.sel{border-color:var(--gr);background:#effaf0}.card h3{color:var(--d);font-size:16px}
+.sym{font-size:40px}.sm{font-size:12px;color:#666}.ok{color:var(--g);font-weight:bold}.bad{color:var(--r);font-weight:bold}.warn{color:#b45309;font-weight:bold}
+.tag{display:inline-block;background:#dbe6fb;color:var(--d);border-radius:10px;padding:1px 8px;font-size:12px;margin:1px}
+.sms{background:#fff8d6;border:1px dashed #d4a800;border-radius:8px;padding:10px 12px;margin:10px 0;font-size:14px}
+.pbar{background:#e3e9f5;border-radius:6px;height:14px;overflow:hidden;margin:4px 0}.pbar div{background:var(--c);height:100%}.pbar.gn div{background:var(--gr)}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:14px}th,td{border:1px solid var(--b);padding:7px;text-align:left;vertical-align:top}th{background:#e6edf9}
+.tabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}.tabs button{border:0;background:#e6edf9;padding:7px 12px;border-radius:4px;cursor:pointer}.tabs .on{background:var(--c);color:#fff}
+.otp{font-size:22px;letter-spacing:8px;text-align:center;max-width:200px}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--g);color:#fff;padding:10px 18px;border-radius:6px;display:none;z-index:50;max-width:90%}#toast.e{background:var(--r)}
+footer{background:var(--d);color:#fff;text-align:center;padding:14px;font-size:13px}
+@media(max-width:760px){#mb{display:block}nav{display:none;width:100%;flex-direction:column}nav.open{display:flex}}
+</style>
+</head>
+<body>
+<header><div class="bar"><a class="brand" href="#" data-go="home">&#128499; Vote<span>Online</span></a><button id="mb">&#9776;</button><nav id="nav"></nav></div></header>
+<main id="app"></main>
+<footer>&copy; 2026 VoteOnline - Secure E-Voting System. Internet Programming Lab. Demo only: not for real elections.</footer>
+<div id="toast"></div>
+
+<script>
+/* VoteOnline - data is stored in the browser (localStorage). No real SMS or encryption: this is a lab demo.
+   Demo logins -> Admin: admin / admin123 | Voter: VID1001 / vote123 (OTP is shown in the yellow "Demo SMS" box) */
+const K = "voteOnlineDB", S = "voteOnlineUser", OTP_MIN = 2;
+const $ = (i) => document.getElementById(i);
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+function seed() {
+  const C = (id, name, party, sym, age, bio) => ({ id, name, party, sym, age, bio });
+  const V = (vid, name, mobile, ward) => ({ vid, name, mobile, ward, password: "vote123", blocked: false, voted: {} });
+  const names = ["Arjun Nair", "Priya Das", "Karthik Rao", "Sneha Reddy", "Imran Sheikh", "Lakshmi Menon", "Rohit Jain", "Divya Pillai"];
+  const d = { n: 100, admin: { username: "admin", password: "admin123" }, wards: [{ id: 1, name: "Ward 1 - North" }, { id: 2, name: "Ward 2 - South" }, { id: 3, name: "Ward 3 - East" }],
+    cands: [C(1, "Anita Rao", "Unity Party", "\u{1F33C}", 45, "Former school principal focused on education and public libraries."), C(2, "Rahul Verma", "Progress Alliance", "\u{1F333}", 52, "Civil engineer promising better roads, drainage and street lighting."),
+      C(3, "Sana Khan", "People's Front", "\u2B50", 38, "Healthcare worker campaigning for clinics and clean drinking water."), C(4, "Dev Patel", "Green Future", "\u{1F343}", 41, "Environmentalist working on parks, waste management and solar power."),
+      C(5, "Yes - Build the community park", "Referendum option", "\u2705", "", "Approve building a new community park on the vacant municipal land."), C(6, "No - Keep the land for housing", "Referendum option", "\u274C", "", "Reject the park and use the land for affordable housing.")],
+    voters: names.map((n, i) => V("VID" + (1001 + i), n, "98765" + String(43210 + i * 111), (i % 3) + 1)), ballots: [], sms: [], elections: [] };
+  d.voters[0].name = "Arjun Nair"; d.voters[0].mobile = "9876543210";
+  d.elections = [{ id: 1, title: "City Council Election 2026", type: "Candidate", status: "Open", wards: [1, 2, 3], cands: [1, 2, 3, 4], desc: "Elect your council representative for the next 5 years." },
+    { id: 2, title: "Community Park Referendum", type: "Referendum", status: "Open", wards: [1, 2], cands: [5, 6], desc: "Should the municipal land be used for a public park?" },
+    { id: 3, title: "Library Board Election 2025", type: "Candidate", status: "Closed", wards: [1, 2, 3], cands: [1, 3, 4], desc: "Completed election - results are published." }];
+  for (let i = 0; i < 24; i++) d.ballots.push({ id: d.n++, eid: 3, cid: [1, 3, 4][(i * 7 + (i % 3)) % 3 === 0 ? 0 : i % 3], ward: (i % 3) + 1, at: new Date(Date.now() - 9e8).toISOString(), receipt: "OLD" + i });
+  return d;
+}
+let db; try { db = JSON.parse(localStorage.getItem(K)); } catch (e) {}
+if (!db || !db.elections) db = seed();
+let STORE_OK = true; try { localStorage.setItem("__t", "1"); localStorage.removeItem("__t"); } catch (e) { STORE_OK = false; }
+const save = () => { try { localStorage.setItem(K, JSON.stringify(db)); } catch (e) {} };
+const mem = {};
+const ss = { get: (k) => { let v = null; try { v = sessionStorage.getItem(k); } catch (e) {} return v != null ? v : (mem[k] || null); },
+  set: (k, v) => { mem[k] = v; try { sessionStorage.setItem(k, v); } catch (e) {} }, del: (k) => { delete mem[k]; try { sessionStorage.removeItem(k); } catch (e) {} } };
+save();
+
+const who = () => { const s = ss.get(S); return s === "ADMIN" ? { role: "admin", name: "Election Commissioner" } : s ? Object.assign({ role: "voter" }, db.voters.find((v) => v.vid === s)) : null; };
+const voter = (id) => db.voters.find((v) => v.vid === id), cand = (id) => db.cands.find((c) => c.id == id), elec = (id) => db.elections.find((e) => e.id == id), ward = (id) => db.wards.find((w) => w.id == id);
+const ui = { v: "home", tab: "res", pend: null, sms: "", vote: null, last: null, ev: null, ee: null, ec: null, res: null, imp: "" };
+const mask = (m) => "XXXXXX" + String(m).slice(-4);
+const eligible = (e) => db.voters.filter((v) => e.wards.includes(v.ward) && !v.blocked);
+const cast = (eid) => db.ballots.filter((b) => b.eid === eid).length;
+const canVote = (v, e) => e.status === "Open" && e.wards.includes(v.ward) && !(v.voted || {})[e.id];
+function newOtp(purpose, mobile) { const code = String(Math.floor(100000 + Math.random() * 900000)); ui.sms = "SMS to " + mask(mobile) + ": Your VoteOnline " + purpose + " OTP is " + code + ". Valid for " + OTP_MIN + " minutes. Do not share it."; db.sms.push({ to: mobile, text: ui.sms, at: new Date().toISOString() }); save(); return { code, exp: Date.now() + OTP_MIN * 60000, tries: 0 }; }
+function results(eid) {
+  const e = elec(eid), b = db.ballots.filter((x) => x.eid === eid), rows = e.cands.map((id) => ({ c: cand(id), n: b.filter((x) => x.cid === id).length })).sort((a, z) => z.n - a.n), el = eligible(e).length;
+  return { e, rows, total: b.length, el, turn: el ? Math.round(b.length * 100 / el) : 0, byWard: e.wards.map((w) => ({ w: ward(w), n: b.filter((x) => x.ward === w).length, el: db.voters.filter((v) => v.ward === w && !v.blocked).length })), top: rows[0], tie: rows[1] && rows[1].n === rows[0].n && rows[0].n > 0 };
+}
+function toast(m, e) { const t = $("toast"); t.textContent = m; t.className = e ? "e" : ""; t.style.display = "block"; clearTimeout(toast.t); toast.t = setTimeout(() => t.style.display = "none", Math.max(3500, m.length * 60)); }
+function go(v) { ui.v = v; $("nav").classList.remove("open"); render(); scrollTo(0, 0); }
+function fld(n, l, t, x) { return `<label>${l}</label><input name="${n}" type="${t || "text"}" ${x === undefined ? "required" : x}>`; }
+const sel = (n, l, opts, cur) => `<label>${l}</label><select name="${n}">${opts.map((o) => `<option value="${esc(o[0])}" ${String(o[0]) === String(cur) ? "selected" : ""}>${esc(o[1])}</option>`).join("")}</select>`;
+const tb = (head, rows) => `<div class="tw"><table><tr>${head.map((x) => `<th>${x}</th>`).join("")}</tr>${rows.join("") || `<tr><td colspan="${head.length}">Nothing here yet.</td></tr>`}</table></div>`;
+const smsBox = () => ui.sms ? `<div class="sms">&#128241; <b>Demo SMS inbox</b> (on a real system this arrives on the voter's phone):<br>${esc(ui.sms)}</div>` : "";
+const bar = (p, cls) => `<div class="pbar ${cls || ""}"><div style="width:${Math.min(100, p)}%"></div></div>`;
+
+/* ---------- Login (step 1: Voter ID, step 2: OTP) ---------- */
+function vAuth() {
+  const p = ui.pend;
+  if (p) return `<div class="hero"><h1>&#128273; OTP Login Verification</h1><p>Step 2 of 2 - enter the 6-digit code sent to ${mask(voter(p.vid).mobile)}</p></div><div class="auth"><section class="p"><h2>Verify OTP</h2>${smsBox()}<form id="f-otp"><label>Enter OTP</label><input class="otp" name="otp" inputmode="numeric" maxlength="6" autocomplete="off" required><button class="btn a">Verify &amp; Login</button><button type="button" class="btn g" data-a="resend">Resend OTP</button><button type="button" class="btn g" data-a="cancel">Cancel</button></form><p class="sm" style="margin-top:8px">The OTP is valid for ${OTP_MIN} minutes. You have 3 attempts.</p></section></div>`;
+  return `<div class="hero"><h1>&#128499; Welcome to VoteOnline</h1><p>Secure remote voting. Login with your Voter ID, then verify with an OTP.</p></div><div class="auth"><section class="p"><h2>Login</h2><form id="f-login">${fld("vid", "Voter ID (or admin username)")}${fld("password", "Password", "password")}<button class="btn">Login &amp; Get OTP</button></form>
+  <p class="sm" style="margin-top:12px">Quick demo login (click to sign in):</p><button type="button" class="btn s" data-a="demo" data-i="VID1001|vote123">Voter (VID1001)</button><button type="button" class="btn s" data-a="demo" data-i="VID1002|vote123">Voter (VID1002)</button><button type="button" class="btn s" data-a="demo" data-i="admin|admin123">Admin</button>
+  <p class="sm" style="margin-top:8px">Voters receive a one-time password after the first step. In this demo the SMS is displayed on screen.</p>${STORE_OK ? "" : '<p class="bad" style="margin-top:10px">Your browser is blocking storage, so changes will be lost when the page is refreshed.</p>'}</section></div>`;
+}
+
+/* ---------- Voter views ---------- */
+function vHome() {
+  const u = who(), l = db.elections.filter((e) => e.wards.includes(u.ward));
+  return `<section class="p"><h2>Welcome, ${esc(u.name)}</h2><p>Voter ID: <b>${u.vid}</b> | ${esc((ward(u.ward) || {}).name || "No ward allocated")}</p></section><section class="p"><h2>My Elections</h2><div class="grid">${l.map((e) => { const done = (u.voted || {})[e.id];
+    return `<div class="card"><h3>${esc(e.title)}</h3><p><span class="tag">${e.type}</span> <span class="${e.status === "Open" ? "ok" : e.status === "Closed" ? "bad" : "warn"}">${e.status}</span></p><p class="sm">${esc(e.desc)}</p><p class="sm">${e.cands.length} ${e.type === "Referendum" ? "options" : "candidates"}</p>
+    ${done ? `<p class="ok">&#10004; You have voted (receipt ${done.receipt})</p>` : canVote(u, e) ? `<button class="btn a" data-a="vote" data-i="${e.id}">Vote Now</button>` : `<p class="sm">${e.status === "Open" ? "" : "Voting is not open."}</p>`}<button class="btn s g" data-a="info" data-i="${e.id}">Candidates &amp; details</button></div>`; }).join("") || "<p>No elections are allocated to your ward.</p>"}</div></section>${ui.info ? vInfo(elec(ui.info)) : ""}`;
+}
+function candCard(c, sel, pick) { return `<div class="card ${sel ? "sel" : ""}"><div class="sym">${c.sym}</div><h3>${esc(c.name)}</h3><p><span class="tag">${esc(c.party)}</span>${c.age ? ` <span class="sm">Age ${c.age}</span>` : ""}</p><p class="sm">${esc(c.bio)}</p>${pick ? `<button class="btn ${sel ? "a" : "o"}" data-a="pick" data-i="${c.id}">${sel ? "&#10004; Selected" : "Select"}</button>` : ""}</div>`; }
+function vInfo(e) { return `<section class="p"><h2>${esc(e.title)} - ${e.type === "Referendum" ? "Options" : "Candidates"}</h2><div class="grid">${e.cands.map((id) => candCard(cand(id), 0, 0)).join("")}</div></section>`; }
+function vVote() {
+  const u = who(), vt = ui.vote, e = elec(vt.eid), o = vt.otp;
+  return `<section class="p"><h2>${esc(e.title)}</h2><p>${esc(e.desc)}</p><p class="sm">Step 1: select your ${e.type === "Referendum" ? "option" : "candidate"}. Step 2: get an OTP on your mobile. Step 3: enter the OTP and submit your vote.</p></section>
+  <section class="p"><h2>1. Select ${e.type === "Referendum" ? "an option" : "a candidate"}</h2><div class="grid">${e.cands.map((id) => candCard(cand(id), vt.cid === id, 1)).join("")}</div></section>
+  <section class="p f"><h2>2. Verify &amp; Submit</h2>${vt.cid ? `<p>Your choice: <b>${esc(cand(vt.cid).name)}</b></p>` : `<p class="warn">Please select a ${e.type === "Referendum" ? "option" : "candidate"} first.</p>`}
+  <button class="btn o" data-a="votp" ${vt.cid ? "" : "disabled"}>${o ? "Resend OTP for voting" : "Get OTP for Voting"}</button>${o ? smsBox() : ""}
+  <form id="f-vote"><label>Enter the 6-digit voting OTP</label><input class="otp" name="otp" inputmode="numeric" maxlength="6" autocomplete="off" required ${o ? "" : "disabled"}><p class="sm">Once submitted, your vote cannot be changed. Your ballot is stored without your name (secret ballot).</p><button class="btn a" ${o ? "" : "disabled"}>Submit Vote</button><button type="button" class="btn g" data-a="home">Cancel</button></form></section>`;
+}
+function vReceipt() { const r = ui.last, e = elec(r.eid); return `<section class="p"><h2>&#10004; Vote Submitted Successfully</h2><div class="sms" style="background:#effaf0;border-color:#138808"><p><b>${esc(e.title)}</b></p><p>Receipt number: <b>${r.receipt}</b><br>Time: ${new Date(r.at).toLocaleString()}</p></div><p class="sm">A confirmation SMS (simulated) was sent to ${mask(who().mobile)}. Keep your receipt number. Your choice is secret and is not shown here.</p><button class="btn" data-go="history">My Voting History</button><button class="btn g" data-go="home">Back to Elections</button></section>`; }
+function vHistory() {
+  const u = who(), l = db.elections.filter((e) => e.wards.includes(u.ward));
+  return `<section class="p"><h2>My Voting History</h2>` + tb(["Election", "Status", "My vote", "Receipt", "Time"], l.map((e) => { const d = (u.voted || {})[e.id]; return `<tr><td>${esc(e.title)}</td><td>${e.status}</td><td class="${d ? "ok" : "warn"}">${d ? "Voted" : e.status === "Open" ? "Not voted yet" : "Did not vote"}</td><td>${d ? d.receipt : "-"}</td><td>${d ? new Date(d.at).toLocaleString() : "-"}</td></tr>`; })) + `</section>`;
+}
+function vProgress() {
+  const u = who(), l = db.elections.filter((e) => e.wards.includes(u.ward));
+  return `<section class="p"><h2>Live Election Progress</h2><p class="sm" id="stamp">Updated ${new Date().toLocaleTimeString()} - turnout updates automatically.</p><br>${l.map((e) => { const r = results(e.id);
+    return `<div class="card" style="margin-bottom:12px"><h3>${esc(e.title)} <span class="${e.status === "Open" ? "ok" : "bad"}">(${e.status})</span></h3><p>Voter turnout: <b>${r.total}</b> of ${r.el} eligible voters (<b>${r.turn}%</b>)</p>${bar(r.turn)}${e.status === "Closed" ? `<p class="ok">Result: ${r.tie ? "Tie" : "Winner - " + esc(r.top.c.name) + " (" + r.top.n + " votes)"}</p>` : `<p class="sm">Candidate-wise results are published after the election closes.</p>`}</div>`; }).join("") || "<p>No elections.</p>"}</section>`;
+}
+function vProfile() { const u = who(); return `<section class="p f"><h2>My Voter Details</h2>${tb(["Field", "Value"], [["Voter ID", u.vid], ["Name", esc(u.name)], ["Registered mobile", mask(u.mobile)], ["Ward", esc((ward(u.ward) || {}).name || "-")]].map((r) => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`))}<p class="sm" style="margin-top:8px">To change your details, contact the election office (administrator).</p></section>`; }
+
+/* ---------- Admin ---------- */
+function vAdmin() {
+  const T = [["res", "Get Election Results"], ["cand", "Create Candidates"], ["elec", "Elections & Allocation"], ["vot", "Voter List"], ["ward", "Wards & Allocation"]];
+  let h = `<section class="p"><h2>Election Commission - Admin Panel</h2><div class="tabs">${T.map((t) => `<button class="${ui.tab === t[0] ? "on" : ""}" data-a="tab" data-i="${t[0]}">${t[1]}</button>`).join("")}</div>`;
+  if (ui.tab === "res") { h += `<p><b>Registered voters:</b> ${db.voters.length} | <b>Elections:</b> ${db.elections.length} | <b>Total ballots:</b> ${db.ballots.length}</p><br>` + db.elections.map((e) => { const r = results(e.id), open = ui.res === e.id;
+      return `<div class="card" style="margin-bottom:12px"><h3>${esc(e.title)} <span class="${e.status === "Open" ? "ok" : e.status === "Closed" ? "bad" : "warn"}">(${e.status})</span></h3><p>Turnout <b>${r.total}</b> / ${r.el} (${r.turn}%)</p>${bar(r.turn, "gn")}<button class="btn s" data-a="res" data-i="${e.id}">${open ? "Hide" : "View"} results</button>
+      ${open ? `<div style="margin-top:8px">${r.rows.map((x) => `<p>${x.c.sym} <b>${esc(x.c.name)}</b> <span class="sm">${esc(x.c.party)}</span> - ${x.n} vote(s) (${r.total ? Math.round(x.n * 100 / r.total) : 0}%)</p>${bar(r.total ? x.n * 100 / r.total : 0)}`).join("")}<p class="ok" style="margin-top:6px">${r.total === 0 ? "No votes yet." : r.tie ? "Result: TIE between the top candidates." : "Leading / Winner: " + esc(r.top.c.name) + " with " + r.top.n + " vote(s)"}</p>
+      <h3 style="margin-top:10px">Ward-wise turnout</h3>${tb(["Ward", "Votes", "Voters", "Turnout"], r.byWard.map((w) => `<tr><td>${esc(w.w.name)}</td><td>${w.n}</td><td>${w.el}</td><td>${w.el ? Math.round(w.n * 100 / w.el) : 0}%</td></tr>`))}<button class="btn s g" data-a="csv" data-i="${e.id}">Export CSV text</button>${ui.csv && ui.csvId === e.id ? `<textarea rows="6" readonly style="margin-top:6px">${esc(ui.csv)}</textarea>` : ""}</div>` : ""}</div>`; }).join(""); }
+  if (ui.tab === "cand") { const e = cand(ui.ec) || { name: "", party: "", sym: "\u{1F33C}", age: 40, bio: "" };
+    h += `<form id="f-cand" class="f"><h3>${ui.ec ? "Update" : "Create"} Election Candidate / Option</h3>${fld("name", "Candidate name (or referendum option)", "text", `value="${esc(e.name)}" required`)}${fld("party", "Party / group", "text", `value="${esc(e.party)}" required`)}<div class="row"><div>${fld("sym", "Symbol (emoji)", "text", `value="${esc(e.sym)}" required`)}</div><div>${fld("age", "Age", "number", `min=0 value="${e.age}"`)}</div></div><label>Biography / details</label><textarea name="bio" rows="3" required>${esc(e.bio)}</textarea><button class="btn">${ui.ec ? "Update" : "Create"}</button>${ui.ec ? `<button type="button" class="btn g" data-a="noec">Cancel</button>` : ""}</form><br>` +
+      tb(["Candidate", "Party", "In elections", ""], db.cands.map((c) => `<tr><td>${c.sym} ${esc(c.name)}</td><td>${esc(c.party)}</td><td>${db.elections.filter((x) => x.cands.includes(c.id)).map((x) => esc(x.title)).join("<br>") || "-"}</td><td><button class="btn s" data-a="ec" data-i="${c.id}">Edit</button><button class="btn s r" data-a="dc" data-i="${c.id}">Delete</button></td></tr>`)); }
+  if (ui.tab === "elec") { const e = elec(ui.ee) || { title: "", type: "Candidate", status: "Upcoming", wards: [], cands: [], desc: "" };
+    h += `<form id="f-elec" class="f"><h3>${ui.ee ? "Update" : "Create"} Election &amp; Allocate Data</h3>${fld("title", "Election title", "text", `value="${esc(e.title)}" required`)}<div class="row"><div>${sel("type", "Type", [["Candidate", "Candidate election"], ["Referendum", "Referendum"]], e.type)}</div><div>${sel("status", "Status", [["Upcoming", "Upcoming"], ["Open", "Open (voting allowed)"], ["Closed", "Closed (results published)"]], e.status)}</div></div>
+    <label>Description</label><textarea name="desc" rows="2">${esc(e.desc)}</textarea><label>Allocate candidates / options</label>${db.cands.map((c) => `<label class="chk"><input type="checkbox" name="cands" value="${c.id}" ${e.cands.includes(c.id) ? "checked" : ""}> ${c.sym} ${esc(c.name)} <span class="sm">(${esc(c.party)})</span></label>`).join("")}
+    <label>Allocate election wards (who can vote)</label>${db.wards.map((w) => `<label class="chk"><input type="checkbox" name="wards" value="${w.id}" ${e.wards.includes(w.id) ? "checked" : ""}> ${esc(w.name)}</label>`).join("")}<button class="btn">${ui.ee ? "Update" : "Create"} Election</button>${ui.ee ? `<button type="button" class="btn g" data-a="noee">Cancel</button>` : ""}</form><br>` +
+      tb(["Election", "Status", "Candidates", "Wards", ""], db.elections.map((x) => `<tr><td>${esc(x.title)}<br><span class="sm">${x.type}</span></td><td>${x.status}</td><td class="sm">${x.cands.map((i) => esc((cand(i) || {}).name)).join(", ")}</td><td class="sm">${x.wards.map((i) => esc((ward(i) || {}).name)).join(", ")}</td><td><button class="btn s" data-a="ee" data-i="${x.id}">Edit / Allocate</button><button class="btn s r" data-a="de" data-i="${x.id}">Delete</button></td></tr>`)); }
+  if (ui.tab === "vot") { const e = voter(ui.ev), wo = db.wards.map((w) => [w.id, w.name]);
+    h += `<div class="two" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px"><form id="f-voter"><h3>${e ? "Update Voter " + e.vid : "Create Voter List Entry"}</h3>${e ? "" : fld("vid", "Voter ID (e.g. VID2001)")}${fld("name", "Full name", "text", `value="${esc(e ? e.name : "")}" required`)}${fld("mobile", "Mobile number (OTP is sent here)", "tel", `value="${esc(e ? e.mobile : "")}" pattern="[0-9]{10}" required`)}${sel("ward", "Ward", wo, e ? e.ward : 1)}${fld("password", e ? "New password (blank = keep)" : "Initial password", "text", e ? "" : "minlength=4 required")}${e ? sel("blocked", "Status", [["no", "Active"], ["yes", "Blocked"]], e.blocked ? "yes" : "no") : ""}<button class="btn">${e ? "Update Voter" : "Add Voter"}</button>${e ? `<button type="button" class="btn g" data-a="noev">Cancel</button>` : ""}</form>
+    <form id="f-import"><h3>Import Voter List</h3><label>Upload a .csv file or paste lines: VoterID,Name,Mobile,WardNumber[,Password]</label><input type="file" id="vfile" accept=".csv,.txt"><textarea name="csv" rows="5" placeholder="VID3001,Ravi Kumar,9000000001,1&#10;VID3002,Sita Devi,9000000002,2">${esc(ui.imp)}</textarea><button class="btn o">Import</button></form></div><br>` +
+      tb(["Voter ID", "Name", "Mobile", "Ward", "Voted in", "Status", ""], db.voters.map((v) => `<tr><td>${v.vid}</td><td>${esc(v.name)}</td><td>${esc(v.mobile)}</td><td>${esc((ward(v.ward) || {}).name || "-")}</td><td class="sm">${Object.keys(v.voted || {}).map((i) => esc((elec(i) || {}).title)).join("<br>") || "-"}</td><td>${v.blocked ? "Blocked" : "Active"}</td><td><button class="btn s" data-a="ev" data-i="${v.vid}">Update</button><button class="btn s r" data-a="dv" data-i="${v.vid}">Delete</button></td></tr>`)); }
+  if (ui.tab === "ward") h += `<form id="f-ward" class="f"><h3>Create Election Ward</h3>${fld("name", "Ward name")}<button class="btn">Add Ward</button></form><br><form id="f-alloc" class="f"><h3>Allocate Users to Ward</h3>${sel("ward", "Ward", db.wards.map((w) => [w.id, w.name]), 1)}<label>Select voters</label><div style="max-height:180px;overflow:auto;border:1px solid var(--b);padding:6px;border-radius:4px">${db.voters.map((v) => `<label class="chk"><input type="checkbox" name="vs" value="${v.vid}"> ${v.vid} - ${esc(v.name)} <span class="sm">(${esc((ward(v.ward) || {}).name || "none")})</span></label>`).join("")}</div><button class="btn">Allocate Selected Voters</button></form><br>` +
+    tb(["Ward", "Voters", ""], db.wards.map((w) => `<tr><td>${esc(w.name)}</td><td>${db.voters.filter((v) => v.ward === w.id).length}</td><td><button class="btn s r" data-a="dw" data-i="${w.id}">Delete</button></td></tr>`));
+  return h + "</section>";
+}
+
+function render() {
+  const u = who(), nav = $("nav");
+  if (!u) { nav.innerHTML = ""; $("mb").style.display = "none"; $("app").innerHTML = vAuth(); return; }
+  $("mb").style.display = ""; const ad = u.role === "admin";
+  if (ad) ui.v = "admin"; else if (ui.v === "admin") ui.v = "home"; if (ui.v === "vote" && !ui.vote) ui.v = "home";
+  const it = ad ? [["admin", "Admin Panel"]] : [["home", "My Elections"], ["history", "Voting History"], ["progress", "Live Progress"], ["profile", "My Details"]];
+  nav.innerHTML = it.map((i) => `<a href="#" data-go="${i[0]}" class="${ui.v === i[0] ? "on" : ""}">${i[1]}</a>`).join("") + `<a href="#" data-a="logout">Logout (${esc(ad ? "admin" : u.vid)})</a>`;
+  const V = { home: vHome, vote: vVote, receipt: vReceipt, history: vHistory, progress: vProgress, profile: vProfile, admin: vAdmin };
+  $("app").innerHTML = (V[ui.v] || vHome)();
+}
+
+/* ---------- Actions ---------- */
+const A = {
+  demo(i) { const p = i.split("|"); document.querySelector("#f-login [name=vid]").value = p[0]; document.querySelector("#f-login [name=password]").value = p[1]; F["f-login"]($("f-login")); },
+  logout() { ss.del(S); ui.pend = null; ui.vote = null; ui.sms = ""; ui.v = "home"; toast("You have been logged out securely."); render(); },
+  cancel() { ui.pend = null; ui.sms = ""; render(); }, resend() { ui.pend.otp = newOtp("login", voter(ui.pend.vid).mobile); toast("A new OTP was sent."); render(); },
+  info(i) { ui.info = ui.info === Number(i) ? null : Number(i); render(); }, home() { ui.vote = null; ui.sms = ""; go("home"); },
+  vote(i) { const u = who(), e = elec(i); if (!canVote(u, e)) return toast("You cannot vote in this election.", 1); ui.vote = { eid: e.id, cid: null, otp: null }; ui.sms = ""; go("vote"); },
+  pick(i) { ui.vote.cid = Number(i); render(); },
+  votp() { ui.vote.otp = newOtp("voting", who().mobile); toast("OTP sent to your registered mobile."); render(); },
+  tab(i) { ui.tab = i; ui.ev = ui.ee = ui.ec = null; render(); }, res(i) { ui.res = ui.res === Number(i) ? null : Number(i); render(); },
+  csv(i) { const r = results(Number(i)); ui.csvId = Number(i); ui.csv = "Candidate,Party,Votes\n" + r.rows.map((x) => '"' + x.c.name + '","' + x.c.party + '",' + x.n).join("\n") + "\nTotal votes," + r.total + "\nTurnout %," + r.turn; render(); },
+  ec(i) { ui.ec = Number(i); render(); }, noec() { ui.ec = null; render(); }, dc(i) { if (db.elections.some((e) => e.cands.includes(Number(i)))) return toast("This candidate is allocated to an election. Remove the allocation first.", 1); db.cands = db.cands.filter((c) => c.id != i); save(); toast("Candidate deleted."); render(); },
+  ee(i) { ui.ee = Number(i); render(); }, noee() { ui.ee = null; render(); }, de(i) { db.elections = db.elections.filter((e) => e.id != i); db.ballots = db.ballots.filter((b) => b.eid != i); save(); toast("Election deleted."); render(); },
+  ev(i) { ui.ev = i; render(); }, noev() { ui.ev = null; render(); }, dv(i) { db.voters = db.voters.filter((v) => v.vid !== i); save(); toast("Voter removed from the list."); render(); },
+  dw(i) { if (db.voters.some((v) => v.ward == i) || db.elections.some((e) => e.wards.includes(Number(i)))) return toast("This ward is in use by voters or elections.", 1); db.wards = db.wards.filter((w) => w.id != i); save(); render(); }
+};
+document.addEventListener("click", (e) => { const el = e.target.closest("[data-go],[data-a],#mb"); if (!el) return; if (el.id === "mb") return $("nav").classList.toggle("open"); e.preventDefault(); if (el.dataset.go) { ui.vote = null; go(el.dataset.go); } else A[el.dataset.a](el.dataset.i); });
+document.addEventListener("change", (e) => { if (e.target.id !== "vfile" || !e.target.files[0]) return; const r = new FileReader(); r.onload = () => { ui.imp = String(r.result); document.querySelector("#f-import [name=csv]").value = ui.imp; toast("File loaded. Click Import."); }; r.readAsText(e.target.files[0]); });
+
+/* ---------- Forms ---------- */
+const F = {
+  "f-login"(f) { const id = f.elements.vid.value.trim(), pw = f.elements.password.value;
+    if (id.toLowerCase() === db.admin.username) { if (pw !== db.admin.password) return toast("Wrong password.", 1); ss.set(S, "ADMIN"); ui.v = "admin"; toast("Welcome, Election Commissioner."); return render(); }
+    const v = voter(id.toUpperCase()); if (!v) return toast("Voter ID not found. Check your Voter ID or contact the election office.", 1); if (v.password !== pw) return toast("Wrong password. Please try again.", 1); if (v.blocked) return toast("This voter account is blocked.", 1);
+    ui.pend = { vid: v.vid, otp: newOtp("login", v.mobile) }; toast("Password accepted. An OTP has been sent to your mobile."); render(); },
+  "f-otp"(f) { const p = ui.pend, o = p.otp, code = f.elements.otp.value.trim(); if (Date.now() > o.exp) return toast("OTP expired. Click Resend OTP.", 1);
+    if (code !== o.code) { o.tries++; if (o.tries >= 3) { ui.pend = null; ui.sms = ""; toast("Too many wrong attempts. Please login again.", 1); return render(); } return toast("Wrong OTP. Attempts left: " + (3 - o.tries), 1); }
+    ss.set(S, p.vid); ui.pend = null; ui.sms = ""; ui.v = "home"; toast("OTP verified. Welcome, " + voter(p.vid).name + "!"); render(); },
+  "f-vote"(f) { const u = who(), vt = ui.vote, e = elec(vt.eid), o = vt.otp, code = f.elements.otp.value.trim(); if (!vt.cid) return toast("Select a candidate first.", 1); if (!canVote(u, e)) return toast("You cannot vote in this election (closed or already voted).", 1);
+    if (Date.now() > o.exp) return toast("OTP expired. Click Resend OTP for voting.", 1); if (code !== o.code) { o.tries++; if (o.tries >= 3) { vt.otp = null; ui.sms = ""; toast("Too many wrong OTP attempts. Request a new OTP.", 1); return render(); } return toast("Wrong OTP. Attempts left: " + (3 - o.tries), 1); }
+    const receipt = "VOTE-" + e.id + "-" + Math.floor(1e7 + Math.random() * 9e7), at = new Date().toISOString(); db.ballots.push({ id: db.n++, eid: e.id, cid: vt.cid, ward: u.ward, at, receipt }); const v = voter(u.vid); v.voted = v.voted || {}; v.voted[e.id] = { receipt, at }; save();
+    ui.last = { eid: e.id, receipt, at }; ui.vote = null; ui.sms = ""; toast("Your vote has been recorded. Thank you!"); go("receipt"); },
+  "f-cand"(f) { const e = f.elements, d = { name: e.name.value.trim(), party: e.party.value.trim(), sym: e.sym.value.trim(), age: e.age.value ? +e.age.value : "", bio: e.bio.value.trim() }; if (ui.ec) Object.assign(cand(ui.ec), d); else db.cands.push(Object.assign({ id: db.n++ }, d)); ui.ec = null; save(); toast("Candidate saved."); render(); },
+  "f-elec"(f) { const e = f.elements, d = { title: e.title.value.trim(), type: e.type.value, status: e.status.value, desc: e.desc.value.trim(), cands: [...f.querySelectorAll("[name=cands]:checked")].map((x) => +x.value), wards: [...f.querySelectorAll("[name=wards]:checked")].map((x) => +x.value) };
+    if (!d.cands.length || !d.wards.length) return toast("Allocate at least one candidate and one ward.", 1); if (ui.ee) Object.assign(elec(ui.ee), d); else db.elections.push(Object.assign({ id: db.n++ }, d)); ui.ee = null; save(); toast("Election saved with allocations."); render(); },
+  "f-voter"(f) { const e = f.elements; if (ui.ev) { const v = voter(ui.ev); Object.assign(v, { name: e.name.value.trim(), mobile: e.mobile.value.trim(), ward: +e.ward.value, blocked: e.blocked.value === "yes" }); if (e.password.value) v.password = e.password.value; ui.ev = null; toast("Voter updated."); }
+    else { const id = e.vid.value.trim().toUpperCase(); if (voter(id)) return toast("This Voter ID already exists.", 1); db.voters.push({ vid: id, name: e.name.value.trim(), mobile: e.mobile.value.trim(), ward: +e.ward.value, password: e.password.value, blocked: false, voted: {} }); toast("Voter added to the list."); } save(); render(); },
+  "f-import"(f) { const lines = f.elements.csv.value.split(/\r?\n/).map((l) => l.trim()).filter(Boolean); let ok = 0, dup = 0, bad = 0;
+    lines.forEach((l) => { const p = l.split(",").map((x) => x.trim()); if (/^voter\s*id/i.test(p[0])) return; if (p.length < 4 || !/^\d{10}$/.test(p[2]) || !ward(+p[3])) { bad++; return; } const id = p[0].toUpperCase(); if (voter(id)) { dup++; return; } db.voters.push({ vid: id, name: p[1], mobile: p[2], ward: +p[3], password: p[4] || "vote123", blocked: false, voted: {} }); ok++; });
+    ui.imp = ""; save(); toast("Import finished: " + ok + " added, " + dup + " duplicate(s) skipped, " + bad + " invalid line(s)." + (ok ? " Default password is vote123 unless given." : ""), !ok); render(); },
+  "f-ward"(f) { db.wards.push({ id: db.n++, name: f.elements.name.value.trim() }); save(); toast("Ward created."); render(); },
+  "f-alloc"(f) { const w = +f.elements.ward.value, ids = [...f.querySelectorAll("[name=vs]:checked")].map((x) => x.value); if (!ids.length) return toast("Select at least one voter.", 1); ids.forEach((id) => voter(id).ward = w); save(); toast(ids.length + " voter(s) allocated to " + ward(w).name + "."); render(); }
+};
+document.addEventListener("submit", (e) => { e.preventDefault(); if (F[e.target.id]) F[e.target.id](e.target); });
+const inv = {};
+document.addEventListener("invalid", (e) => { e.preventDefault(); const b = e.target, l = b.previousElementSibling; if (inv.on) return; inv.on = 1; setTimeout(() => inv.on = 0, 300); toast("Please check: " + (l && l.tagName === "LABEL" ? l.textContent : b.name) + " (" + b.validationMessage + ")", 1); }, true);
+window.addEventListener("storage", (e) => { if (e.key !== K || !e.newValue || !who()) return; try { db = JSON.parse(e.newValue); } catch (x) { return; } if (["progress", "home", "history"].includes(ui.v) || (ui.v === "admin" && ui.tab === "res")) { render(); toast("Election data updated live."); } });
+setInterval(() => { if (ui.v === "progress" && who()) render(); }, 15000);
+render();
+</script>
+</body>
+</html>
