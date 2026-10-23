@@ -1,0 +1,741 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RentRide | Vehicle Rental Platform</title>
+
+<style>
+:root{
+    --navy:#142d4e;
+    --blue:#2878d0;
+    --sky:#eaf4ff;
+    --light:#f4f8fc;
+    --white:#ffffff;
+    --text:#25364a;
+    --muted:#718096;
+    --border:#dce6f0;
+    --green:#198754;
+    --red:#dc3545;
+    --orange:#f59e0b;
+}
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--light);
+    color:var(--text);
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:15px;
+    background:white;
+    padding:16px 5%;
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+.logo{
+    font-size:25px;
+    font-weight:bold;
+    color:var(--navy);
+}
+.logo span{color:var(--blue)}
+nav{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+nav button{
+    border:0;
+    background:none;
+    color:var(--text);
+    padding:8px 4px;
+}
+nav button:hover{color:var(--blue)}
+.btn{
+    background:var(--blue);
+    color:white;
+    border:0;
+    padding:11px 17px;
+    border-radius:7px;
+    font-weight:bold;
+}
+.btn:hover{opacity:.88}
+.btn-dark{background:var(--navy)}
+.btn-light{background:var(--sky);color:var(--navy)}
+.btn-green{background:var(--green)}
+.btn-red{background:var(--red)}
+.btn-orange{background:var(--orange);color:#172033}
+.container{max-width:1200px;margin:auto;padding:25px}
+.hero{
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:30px;
+    align-items:center;
+    padding:65px 7%;
+    background:linear-gradient(120deg,#eaf4ff,#ffffff);
+}
+.hero h1{
+    font-size:45px;
+    color:var(--navy);
+    line-height:1.15;
+    margin:15px 0;
+}
+.hero p{font-size:17px;line-height:1.7;color:var(--muted)}
+.tag{color:var(--blue);font-weight:bold;letter-spacing:1px}
+.hero-image{
+    min-height:280px;
+    border-radius:20px;
+    background:linear-gradient(140deg,#cce5ff,#eff7ff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:100px;
+}
+.features,.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:18px;
+}
+.features{padding:35px 5%;background:white}
+.feature,.card,.stat{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 4px 12px #142d4e08;
+}
+.feature{text-align:center}
+.feature .icon{font-size:34px}
+.card h3,.feature h3{color:var(--navy);margin-top:5px}
+.card p,.feature p{color:var(--muted);line-height:1.6}
+.car-image{
+    height:145px;
+    background:var(--sky);
+    border-radius:9px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:75px;
+    margin-bottom:15px;
+}
+.price{font-size:22px;color:var(--blue);font-weight:bold}
+.form-card{
+    max-width:650px;
+    margin:30px auto;
+    padding:28px;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:14px;
+}
+.form-card h2{color:var(--navy);margin-top:0}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.field{margin-bottom:15px}
+.field label{display:block;font-weight:bold;font-size:13px;margin-bottom:7px}
+input,select,textarea{
+    width:100%;
+    padding:11px;
+    border:1px solid #d4e0ec;
+    border-radius:7px;
+    background:white;
+    outline:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--blue)}
+textarea{min-height:85px;resize:vertical}
+.full{grid-column:1/-1}
+.hidden{display:none!important}
+.layout{
+    display:grid;
+    grid-template-columns:230px 1fr;
+    min-height:75vh;
+}
+.sidebar{
+    padding:20px 14px;
+    background:white;
+    border-right:1px solid var(--border);
+}
+.sidebar h3{color:var(--navy);padding-left:8px}
+.sidebar button{
+    display:block;
+    width:100%;
+    padding:12px;
+    margin:3px 0;
+    text-align:left;
+    background:white;
+    border:0;
+    border-radius:7px;
+    color:var(--text);
+}
+.sidebar button:hover,.sidebar button.active{
+    background:var(--navy);
+    color:white;
+}
+.dashboard-content{padding:25px;min-width:0}
+.stat strong{
+    display:block;
+    font-size:27px;
+    margin-top:10px;
+    color:var(--blue);
+}
+.table-wrap{overflow-x:auto;border-radius:9px}
+table{width:100%;border-collapse:collapse;background:white;min-width:650px}
+th,td{
+    padding:13px;
+    text-align:left;
+    border-bottom:1px solid var(--border);
+    font-size:13px;
+}
+th{background:var(--sky);color:var(--navy)}
+.badge{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:15px;
+    font-size:12px;
+    background:#fff0cf;
+    color:#946200;
+}
+.badge.approved{background:#d9f5e4;color:#176b45}
+.badge.rejected{background:#ffe0e0;color:#b42332}
+.badge.pending{background:#fff0cf;color:#946200}
+.notice{
+    background:var(--sky);
+    border-radius:8px;
+    padding:13px;
+    margin-bottom:18px;
+    line-height:1.6;
+}
+.small{font-size:12px;color:var(--muted)}
+hr{border:0;border-top:1px solid var(--border);margin:20px 0}
+footer{
+    background:var(--navy);
+    color:white;
+    text-align:center;
+    padding:28px;
+    margin-top:30px;
+}
+footer p{color:#d7e5f5}
+section{padding:25px 0}
+.section-title{color:var(--navy)}
+.rating{color:#e5a000;font-size:18px}
+@media(max-width:750px){
+    header{align-items:flex-start;flex-direction:column}
+    nav{gap:8px}
+    .hero{grid-template-columns:1fr;padding:35px 7%}
+    .hero h1{font-size:33px}
+    .hero-image{min-height:190px;font-size:75px}
+    .layout{grid-template-columns:1fr}
+    .sidebar{border-right:0;border-bottom:1px solid var(--border)}
+    .sidebar button{width:auto;display:inline-block}
+    .form-grid{grid-template-columns:1fr}
+    .full{grid-column:auto}
+    .dashboard-content{padding:14px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🚘 Rent<span>Ride</span></div>
+    <nav>
+        <button onclick="showHome()">Home</button>
+        <button onclick="showVehicles()">Vehicles</button>
+        <button onclick="showReviews()">Reviews</button>
+        <button onclick="showLogin()">Login</button>
+        <button class="btn" onclick="showRegister()">Register</button>
+    </nav>
+</header>
+
+<main id="app"></main>
+
+<footer>
+    <h3>🚘 RentRide</h3>
+    <p>Your Journey, Our Vehicles</p>
+    <p class="small">Vehicle Rental and Booking Management System</p>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+function read(key,fallback=[]){
+    try{return JSON.parse(localStorage.getItem(key))||fallback}
+    catch(e){return fallback}
+}
+function save(key,value){
+    localStorage.setItem(key,JSON.stringify(value));
+}
+function escapeHTML(value){
+    return String(value??"").replace(/[&<>"']/g,c=>({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[c]));
+}
+function makeId(){
+    return Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+}
+function currentUser(){
+    return JSON.parse(sessionStorage.getItem("rrUser")||"null");
+}
+function setUser(user){
+    sessionStorage.setItem("rrUser",JSON.stringify(user));
+}
+function logout(){
+    sessionStorage.removeItem("rrUser");
+    showHome();
+}
+function notify(text){alert(text)}
+
+function setup(){
+    if(!localStorage.getItem("rrUsers")){
+        save("rrUsers",[
+            {id:makeId(),name:"RentRide Admin",email:"admin@rentride.com",password:"admin123",role:"admin",phone:"9876543210",address:"RentRide Office"},
+            {id:makeId(),name:"Demo Customer",email:"user@rentride.com",password:"user123",role:"user",phone:"9876501234",address:"Chennai"}
+        ]);
+    }
+    if(!localStorage.getItem("rrVehicles")){
+        save("rrVehicles",[
+            {id:makeId(),name:"Hyundai Creta",type:"SUV",price:2500,location:"Chennai",seats:5,fuel:"Petrol",transmission:"Automatic",description:"Comfortable SUV suitable for family trips.",emoji:"🚙",available:true},
+            {id:makeId(),name:"Maruti Swift",type:"Car",price:1500,location:"Chennai",seats:5,fuel:"Petrol",transmission:"Manual",description:"Compact and economical city car.",emoji:"🚗",available:true},
+            {id:makeId(),name:"Toyota Innova",type:"SUV",price:3200,location:"Bengaluru",seats:7,fuel:"Diesel",transmission:"Manual",description:"Spacious vehicle for group and family travel.",emoji:"🚐",available:true},
+            {id:makeId(),name:"Mahindra Thar",type:"SUV",price:3500,location:"Hyderabad",seats:4,fuel:"Diesel",transmission:"Manual",description:"Rugged SUV for adventurous journeys.",emoji:"🚙",available:true},
+            {id:makeId(),name:"Tata Ace",type:"Truck",price:1800,location:"Chennai",seats:2,fuel:"Diesel",transmission:"Manual",description:"Small commercial vehicle for local goods transport.",emoji:"🚚",available:true},
+            {id:makeId(),name:"Honda City",type:"Car",price:2200,location:"Vijayawada",seats:5,fuel:"Petrol",transmission:"Automatic",description:"Comfortable sedan for business and personal trips.",emoji:"🚘",available:true}
+        ]);
+    }
+    ["rrBookings","rrReviews","rrCheckins"].forEach(k=>{
+        if(!localStorage.getItem(k))save(k,[]);
+    });
+}
+setup();
+
+function showHome(){
+    $("app").innerHTML=`
+    <section class="hero">
+        <div>
+            <div class="tag">YOUR JOURNEY STARTS HERE</div>
+            <h1>Find Your Perfect Ride With RentRide</h1>
+            <p>Discover cars, SUVs and trucks at affordable prices. Search vehicles, select your dates and book your next journey with ease.</p>
+            <button class="btn" onclick="showVehicles()">Explore Vehicles</button>
+            <button class="btn btn-dark" onclick="showRegister()">Get Started</button>
+        </div>
+        <div class="hero-image">🚗 🚙 🚐</div>
+    </section>
+
+    <div class="features">
+        <div class="feature"><div class="icon">🔎</div><h3>Easy Search</h3><p>Find vehicles by type, location and price.</p></div>
+        <div class="feature"><div class="icon">📅</div><h3>Quick Booking</h3><p>Choose pickup and return dates and times.</p></div>
+        <div class="feature"><div class="icon">🔐</div><h3>Booking Management</h3><p>Track booking requests and their status.</p></div>
+        <div class="feature"><div class="icon">⭐</div><h3>Customer Reviews</h3><p>Share your rental experience with others.</p></div>
+    </div>
+
+    <div class="container">
+        <section>
+            <h2 class="section-title">Popular Vehicles</h2>
+            <div class="grid" id="popularVehicles"></div>
+        </section>
+        <section>
+            <h2 class="section-title">How RentRide Works</h2>
+            <div class="grid">
+                <div class="card"><h3>1. Search</h3><p>Choose the vehicle type and pickup location you need.</p></div>
+                <div class="card"><h3>2. Book</h3><p>Enter your details, dates and preferred pickup time.</p></div>
+                <div class="card"><h3>3. Confirm</h3><p>Check your booking status in your personal dashboard.</p></div>
+            </div>
+        </section>
+    </div>`;
+    renderVehicleCards("popularVehicles",3);
+}
+
+function showRegister(){
+    $("app").innerHTML=`
+    <div class="form-card">
+        <h2>Create Your Account</h2>
+        <p>Register to search and book vehicles with RentRide.</p>
+        <form onsubmit="registerUser(event)">
+            <div class="form-grid">
+                <div class="field"><label>Full Name</label><input name="name" required></div>
+                <div class="field"><label>Customer Number</label><input name="phone" required></div>
+                <div class="field"><label>Email Address</label><input name="email" type="email" required></div>
+                <div class="field"><label>Address</label><input name="address" required></div>
+                <div class="field"><label>Password</label><input name="password" type="password" minlength="6" required></div>
+                <div class="field"><label>Confirm Password</label><input name="confirm" type="password" minlength="6" required></div>
+            </div>
+            <button class="btn">Register</button>
+        </form>
+        <p>Already registered? <a href="#" onclick="showLogin();return false">Login here</a></p>
+    </div>`;
+}
+
+function registerUser(e){
+    e.preventDefault();
+    const f=new FormData(e.target);
+    const email=f.get("email").trim().toLowerCase();
+    if(f.get("password")!==f.get("confirm"))return notify("Passwords do not match.");
+    const users=read("rrUsers");
+    if(users.some(u=>u.email===email))return notify("This email is already registered.");
+    users.push({
+        id:makeId(),name:f.get("name"),phone:f.get("phone"),
+        email,password:f.get("password"),address:f.get("address"),role:"user"
+    });
+    save("rrUsers",users);
+    notify("Registration successful. Please log in.");
+    showLogin();
+}
+
+function showLogin(){
+    $("app").innerHTML=`
+    <div class="form-card" style="max-width:450px">
+        <h2>Login to RentRide</h2>
+        <form onsubmit="loginUser(event)">
+            <div class="field"><label>Email Address</label><input name="email" type="email" required></div>
+            <div class="field"><label>Password</label><input name="password" type="password" required></div>
+            <div class="field"><label>Login As</label><select name="role"><option value="user">User</option><option value="admin">Admin</option></select></div>
+            <button class="btn">Login</button>
+        </form>
+        <hr>
+        <p class="small">Demo User: user@rentride.com / user123</p>
+        <p class="small">Demo Admin: admin@rentride.com / admin123</p>
+        <p>New user? <a href="#" onclick="showRegister();return false">Register here</a></p>
+    </div>`;
+}
+
+function loginUser(e){
+    e.preventDefault();
+    const f=new FormData(e.target);
+    const email=f.get("email").trim().toLowerCase();
+    const user=read("rrUsers").find(u=>u.email===email&&u.password===f.get("password")&&u.role===f.get("role"));
+    if(!user)return notify("Invalid email, password or account type.");
+    setUser(user);
+    showDashboard();
+}
+
+function requireUser(){
+    const u=currentUser();
+    if(!u){notify("Please log in first.");showLogin();return null;}
+    return u;
+}
+
+function showVehicles(){
+    $("app").innerHTML=`
+    <div class="container">
+        <h2 class="section-title">Search Available Vehicles</h2>
+        <div class="card">
+            <div class="form-grid">
+                <div class="field"><label>Search by Vehicle Name</label><input id="searchName" placeholder="e.g. Hyundai Creta" oninput="filterVehicles()"></div>
+                <div class="field"><label>Vehicle Type</label><select id="searchType" onchange="filterVehicles()"><option value="">All Types</option><option>Car</option><option>SUV</option><option>Truck</option></select></div>
+                <div class="field"><label>Pickup Location</label><input id="searchLocation" placeholder="Enter city" oninput="filterVehicles()"></div>
+                <div class="field"><label>Maximum Price Per Day (₹)</label><input id="searchPrice" type="number" min="0" placeholder="Any price" oninput="filterVehicles()"></div>
+            </div>
+            <button class="btn" onclick="filterVehicles()">Search Vehicles</button>
+        </div>
+        <div id="vehicleResults" class="grid" style="margin-top:22px"></div>
+    </div>`;
+    filterVehicles();
+}
+
+function filterVehicles(){
+    if(!$("vehicleResults"))return;
+    const name=($("searchName")?.value||"").toLowerCase();
+    const type=$("searchType")?.value||"";
+    const location=($("searchLocation")?.value||"").toLowerCase();
+    const price=Number($("searchPrice")?.value||Infinity);
+    const vehicles=read("rrVehicles").filter(v=>
+        v.available&&v.name.toLowerCase().includes(name)&&
+        (!type||v.type===type)&&
+        v.location.toLowerCase().includes(location)&&v.price<=price
+    );
+    $("vehicleResults").innerHTML=vehicles.length?
+        vehicles.map(vehicleCard).join(""):"<p>No vehicles match your search. Try different filters.</p>";
+}
+
+function vehicleCard(v){
+    return `<div class="card">
+        <div class="car-image">${escapeHTML(v.emoji||"🚗")}</div>
+        <h3>${escapeHTML(v.name)}</h3>
+        <p>${escapeHTML(v.type)} · ${Number(v.seats||5)} seats</p>
+        <p>📍 ${escapeHTML(v.location)}</p>
+        <p>⛽ ${escapeHTML(v.fuel||"Not specified")} · ${escapeHTML(v.transmission||"Not specified")}</p>
+        <p>${escapeHTML(v.description||"Vehicle available for rent.")}</p>
+        <div class="price">₹${Number(v.price)} <span class="small">/ day</span></div>
+        <button class="btn" onclick="bookVehicle('${v.id}')">Book Now</button>
+    </div>`;
+}
+
+function renderVehicleCards(target,limit=100){
+    const vehicles=read("rrVehicles").filter(v=>v.available).slice(0,limit);
+    $(target).innerHTML=vehicles.map(vehicleCard).join("")||"<p>No vehicles available.</p>";
+}
+
+function bookVehicle(vehicleId){
+    const u=requireUser();if(!u)return;
+    if(u.role!=="user")return notify("Please log in with a user account to book vehicles.");
+    const v=read("rrVehicles").find(x=>x.id===vehicleId);
+    if(!v)return notify("Vehicle not found.");
+    $("app").innerHTML=`
+    <div class="form-card">
+        <h2>Book ${escapeHTML(v.name)}</h2>
+        <div class="notice">Price: ₹${Number(v.price)} per day · Location: ${escapeHTML(v.location)}</div>
+        <form onsubmit="submitBooking(event,'${v.id}')">
+            <div class="form-grid">
+                <div class="field"><label>Customer Name</label><input name="name" required value="${escapeHTML(u.name)}"></div>
+                <div class="field"><label>Customer Number</label><input name="phone" required value="${escapeHTML(u.phone||"")}"></div>
+                <div class="field full"><label>Address</label><textarea name="address" required>${escapeHTML(u.address||"")}</textarea></div>
+                <div class="field"><label>Pickup Date</label><input name="pickup" type="date" min="${new Date().toISOString().split("T")[0]}" required></div>
+                <div class="field"><label>Return Date</label><input name="returnDate" type="date" required></div>
+                <div class="field"><label>Pickup Time</label><input name="time" type="time" required></div>
+                <div class="field"><label>Rental Duration</label><select name="duration" required><option value="1">1 day</option><option value="2">2 days</option><option value="3">3 days</option><option value="4">4 days</option><option value="5">5 days</option><option value="7">7 days</option><option value="custom">Other duration — calculate from dates</option></select></div>
+                <div class="field full"><label>Additional Requirements</label><textarea name="requirements" placeholder="Optional requirements"></textarea></div>
+            </div>
+            <button class="btn">Submit Booking</button>
+            <button type="button" class="btn btn-light" onclick="showVehicles()">Cancel</button>
+        </form>
+    </div>`;
+}
+
+function submitBooking(e,vehicleId){
+    e.preventDefault();
+    const u=requireUser();if(!u)return;
+    const f=new FormData(e.target);
+    const pickup=new Date(f.get("pickup")+"T00:00:00");
+    const ret=new Date(f.get("returnDate")+"T00:00:00");
+    if(ret<pickup)return notify("Return date must be on or after pickup date.");
+    const days=Math.max(1,Math.round((ret-pickup)/86400000)+1);
+    const vehicle=read("rrVehicles").find(v=>v.id===vehicleId);
+    if(!vehicle)return notify("Vehicle not found.");
+    const bookings=read("rrBookings");
+    const conflict=bookings.some(b=>
+        b.vehicleId===vehicleId&&b.status!=="Rejected"&&b.status!=="Cancelled"&&
+        !(ret<new Date(b.pickup+"T00:00:00")||pickup>new Date(b.returnDate+"T00:00:00"))
+    );
+    if(conflict)return notify("This vehicle has a booking during the selected dates. Choose another date or vehicle.");
+    bookings.push({
+        id:makeId(),userId:u.id,userName:f.get("name"),phone:f.get("phone"),
+        address:f.get("address"),vehicleId,vehicleName:vehicle.name,
+        vehicleType:vehicle.type,location:vehicle.location,
+        pickup:f.get("pickup"),returnDate:f.get("returnDate"),
+        time:f.get("time"),days,price:vehicle.price,total:vehicle.price*days,
+        requirements:f.get("requirements"),status:"Pending",
+        checkinStatus:"Not submitted",date:new Date().toLocaleDateString()
+    });
+    save("rrBookings",bookings);
+    notify("Booking request submitted successfully. You can track its status in your dashboard.");
+    showDashboard("My Bookings");
+}
+
+function showDashboard(page="Dashboard"){
+    const u=currentUser();
+    if(!u){showLogin();return;}
+    const admin=u.role==="admin";
+    const items=admin?
+    ["Dashboard","Add Vehicle","Manage Vehicles","Manage Bookings","Manage Appointment Timing","View User Details","My Profile","Logout"]:
+    ["Dashboard","Search Vehicles","My Bookings","Check-in Form","Past Appointments","Reviews","My Profile","Logout"];
+    $("app").innerHTML=`
+    <div class="layout">
+        <aside class="sidebar">
+            <h3>🚘 RentRide</h3>
+            <p class="small">${admin?"Admin Panel":"Customer Panel"}</p>
+            ${items.map(x=>`<button class="${x===page?"active":""}" onclick="dashboardPage('${x}')">${x}</button>`).join("")}
+        </aside>
+        <div class="dashboard-content" id="dashContent"></div>
+    </div>`;
+    dashboardPage(page);
+}
+
+function dashboardPage(page){
+    const u=requireUser();if(!u)return;
+    if(page==="Logout"){logout();return;}
+    if(page==="Search Vehicles"){showVehicles();return;}
+    const admin=u.role==="admin";
+    const bookings=read("rrBookings");
+    const mine=admin?bookings:bookings.filter(b=>b.userId===u.id);
+    let html="";
+
+    if(page==="Dashboard"){
+        html=`<h2>Welcome, ${escapeHTML(u.name)}</h2>
+        <p>Manage your ${admin?"vehicle rental platform":"vehicle bookings"} from here.</p>
+        <div class="grid">
+            <div class="stat">Total ${admin?"Bookings":"My Bookings"}<strong>${mine.length}</strong></div>
+            <div class="stat">Pending<strong>${mine.filter(b=>b.status==="Pending").length}</strong></div>
+            <div class="stat">Approved<strong>${mine.filter(b=>b.status==="Approved").length}</strong></div>
+            <div class="stat">${admin?"Vehicles":"Completed / Past"}<strong>${admin?read("rrVehicles").length:mine.filter(b=>new Date(b.returnDate+"T23:59:59")<new Date()).length}</strong></div>
+        </div>
+        <section><h3>Quick Actions</h3><div class="grid">
+        ${admin?`<div class="card"><h3>Add Vehicle</h3><button class="btn" onclick="dashboardPage('Add Vehicle')">Open</button></div><div class="card"><h3>Manage Bookings</h3><button class="btn" onclick="dashboardPage('Manage Bookings')">Open</button></div>`:
+        `<div class="card"><h3>Search Vehicles</h3><button class="btn" onclick="dashboardPage('Search Vehicles')">Explore</button></div><div class="card"><h3>My Bookings</h3><button class="btn" onclick="dashboardPage('My Bookings')">View</button></div>`}
+        </div></section>`;
+    }
+    else if(page==="Add Vehicle"&&admin){
+        html=`<h2>Add New Vehicle</h2>
+        <form class="form-card" style="max-width:none;margin:0" onsubmit="addVehicle(event)">
+        <div class="form-grid">
+        <div class="field"><label>Vehicle Name</label><input name="name" required></div>
+        <div class="field"><label>Vehicle Type</label><select name="type"><option>Car</option><option>SUV</option><option>Truck</option></select></div>
+        <div class="field"><label>Price Per Day (₹)</label><input name="price" type="number" min="1" required></div>
+        <div class="field"><label>Location</label><input name="location" required></div>
+        <div class="field"><label>Number of Seats</label><input name="seats" type="number" min="1" value="5"></div>
+        <div class="field"><label>Fuel Type</label><select name="fuel"><option>Petrol</option><option>Diesel</option><option>Electric</option><option>CNG</option></select></div>
+        <div class="field"><label>Transmission</label><select name="transmission"><option>Manual</option><option>Automatic</option></select></div>
+        <div class="field"><label>Vehicle Symbol</label><select name="emoji"><option>🚗</option><option>🚙</option><option>🚐</option><option>🚚</option><option>🚘</option></select></div>
+        <div class="field full"><label>Description</label><textarea name="description" required></textarea></div>
+        </div><button class="btn">Add Vehicle</button></form>`;
+    }
+    else if(page==="Manage Vehicles"&&admin){
+        html=`<h2>Manage Vehicle Details</h2><div class="grid">${read("rrVehicles").map(v=>`<div class="card"><div class="car-image">${escapeHTML(v.emoji)}</div><h3>${escapeHTML(v.name)}</h3><p>Type: ${escapeHTML(v.type)}</p><p>Location: ${escapeHTML(v.location)}</p><p class="price">₹${Number(v.price)}/day</p><p>Status: ${v.available?"Available":"Unavailable"}</p><button class="btn btn-light" onclick="editVehicle('${v.id}')">Edit</button> <button class="btn ${v.available?"btn-red":"btn-green"}" onclick="toggleVehicle('${v.id}')">${v.available?"Disable":"Enable"}</button></div>`).join("")}</div>`;
+    }
+    else if(page==="Manage Bookings"&&admin){
+        html=`<h2>Manage Booking Details</h2>${bookingTable(mine,true)}`;
+    }
+    else if(page==="My Bookings"&&!admin){
+        html=`<h2>My Bookings</h2>${bookingTable(mine,false)}`;
+    }
+    else if(page==="Check-in Form"&&!admin){
+        const approved=mine.filter(b=>b.status==="Approved");
+        html=`<h2>Vehicle Check-in Form</h2><div class="notice">Submit check-in details for an approved booking.</div>
+        <form class="form-card" style="max-width:none;margin:0" onsubmit="submitCheckin(event)">
+        <div class="field"><label>Select Approved Booking</label><select name="bookingId" required>${approved.map(b=>`<option value="${b.id}">${escapeHTML(b.vehicleName)} — ${escapeHTML(b.pickup)}</option>`).join("")}</select></div>
+        <div class="field"><label>Driving Licence Number</label><input name="licence" required></div>
+        <div class="field"><label>Pickup Condition / Notes</label><textarea name="notes" required></textarea></div>
+        <label><input type="checkbox" name="agree" required style="width:auto"> I confirm the details are correct.</label><br><br>
+        <button class="btn">Submit Check-in</button></form>`;
+        if(!approved.length)html+=`<p>No approved bookings are available for check-in.</p>`;
+    }
+    else if(page==="Past Appointments"&&!admin){
+        const past=mine.filter(b=>new Date(b.returnDate+"T23:59:59")<new Date());
+        html=`<h2>Past Appointments / Rental History</h2>${bookingTable(past,false)}`;
+    }
+    else if(page==="Reviews"&&!admin){
+        html=`<h2>Customer Reviews</h2>
+        <form class="form-card" style="max-width:none;margin:0 0 20px" onsubmit="addReview(event)">
+        <div class="field"><label>Rating</label><select name="rating"><option value="5">5 - Excellent</option><option value="4">4 - Very Good</option><option value="3">3 - Good</option><option value="2">2 - Fair</option><option value="1">1 - Poor</option></select></div>
+        <div class="field"><label>Your Review</label><textarea name="text" required></textarea></div>
+        <button class="btn">Submit Review</button></form>${reviewsHTML()}`;
+    }
+    else if(page==="Manage Appointment Timing"&&admin){
+        html=`<h2>Manage Booking Schedule</h2><p>Review pickup dates and times submitted by customers.</p>${bookingTable(bookings,true)}`;
+    }
+    else if(page==="View User Details"&&admin){
+        const users=read("rrUsers").filter(x=>x.role==="user");
+        html=users.length?`<h2>Registered Customers</h2><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Customer Number</th><th>Address</th></tr></thead><tbody>${users.map(x=>`<tr><td>${escapeHTML(x.name)}</td><td>${escapeHTML(x.email)}</td><td>${escapeHTML(x.phone)}</td><td>${escapeHTML(x.address)}</td></tr>`).join("")}</tbody></table></div>`:"<p>No registered customers yet.</p>";
+    }
+    else if(page==="My Profile"){
+        html=`<h2>My Profile</h2><form class="form-card" style="max-width:none;margin:0" onsubmit="updateProfile(event)">
+        <div class="form-grid">
+        <div class="field"><label>Full Name</label><input name="name" required value="${escapeHTML(u.name)}"></div>
+        <div class="field"><label>Phone Number</label><input name="phone" value="${escapeHTML(u.phone||"")}"></div>
+        <div class="field full"><label>Email</label><input value="${escapeHTML(u.email)}" disabled></div>
+        <div class="field full"><label>Address</label><textarea name="address">${escapeHTML(u.address||"")}</textarea></div>
+        </div><button class="btn">Update Profile</button></form>`;
+    }
+    else{
+        html=`<h2>${escapeHTML(page)}</h2><p>This option is available in the relevant account dashboard.</p>`;
+    }
+    $("dashContent").innerHTML=html;
+}
+
+function bookingTable(list,admin){
+    if(!list.length)return "<p>No bookings found.</p>";
+    return `<div class="table-wrap"><table><thead><tr><th>Vehicle</th><th>Customer</th><th>Pickup</th><th>Return</th><th>Time</th><th>Total</th><th>Status</th>${admin?"<th>Action</th>":"<th>Check-in</th>"}</tr></thead><tbody>
+    ${list.map(b=>`<tr><td>${escapeHTML(b.vehicleName)}</td><td>${escapeHTML(b.userName)}</td><td>${escapeHTML(b.pickup)}</td><td>${escapeHTML(b.returnDate)}</td><td>${escapeHTML(b.time)}</td><td>₹${Number(b.total)}</td><td><span class="badge ${b.status==="Approved"?"approved":b.status==="Rejected"||b.status==="Cancelled"?"rejected":"pending"}">${escapeHTML(b.status)}</span></td><td>${admin&&b.status==="Pending"?`<button class="btn btn-green" onclick="updateBooking('${b.id}','Approved')">Approve</button> <button class="btn btn-red" onclick="updateBooking('${b.id}','Rejected')">Reject</button>`:admin?escapeHTML(b.checkinStatus):escapeHTML(b.checkinStatus)}</td></tr>`).join("")}
+    </tbody></table></div>`;
+}
+
+function updateBooking(bookingId,status){
+    const bookings=read("rrBookings");
+    const b=bookings.find(x=>x.id===bookingId);
+    if(!b)return;
+    if(status==="Approved"){
+        const conflict=bookings.some(x=>x.id!==b.id&&x.vehicleId===b.vehicleId&&x.status==="Approved"&&!(new Date(b.returnDate)<new Date(x.pickup)||new Date(b.pickup)>new Date(x.returnDate)));
+        if(conflict)return notify("This vehicle already has an approved booking during those dates.");
+    }
+    b.status=status;
+    save("rrBookings",bookings);
+    notify("Booking status updated to "+status+".");
+    dashboardPage("Manage Bookings");
+}
+
+function submitCheckin(e){
+    e.preventDefault();
+    const u=requireUser();if(!u)return;
+    const f=new FormData(e.target);
+    const booking=read("rrBookings").find(b=>b.id===f.get("bookingId")&&b.userId===u.id&&b.status==="Approved");
+    if(!booking)return notify("Select a valid approved booking.");
+    const items=read("rrCheckins");
+    items.push({id:makeId(),bookingId:booking.id,userId:u.id,licence:f.get("licence"),notes:f.get("notes"),date:new Date().toLocaleDateString()});
+    save("rrCheckins",items);
+    booking.checkinStatus="Submitted";
+    save("rrBookings",read("rrBookings").map(b=>b.id===booking.id?booking:b));
+    notify("Check-in form submitted.");
+    dashboardPage("My Bookings");
+}
+
+function addVehicle(e){
+    e.preventDefault();
+    const f=new FormData(e.target),vehicles=read("rrVehicles");
+    vehicles.push({
+        id:makeId(),name:f.get("name"),type:f.get("type"),
+        price:Number(f.get("price")),location:f.get("location"),
+        seats:Number(f.get("seats")||5),fuel:f.get("fuel"),
+        transmission:f.get("transmission"),emoji:f.get("emoji"),
+        description:f.get("description"),available:true
+    });
+    save("rrVehicles",vehicles);
+    notify("Vehicle added successfully.");
+    dashboardPage("Manage Vehicles");
+}
+
+function editVehicle(vehicleId){
+    const v=read("rrVehicles").find(x=>x.id===vehicleId);
+    if(!v)return;
+    const name=prompt("Vehicle name:",v.name);
+    if(name===null)return;
+    const price=prompt("Price per day:",v.price);
+    if(price===null)return;
+    const location=prompt("Location:",v.location);
+    if(location===null)return;
+    if(!name.trim()||!Number.isFinite(Number(price))||Number(price)<=0)return notify("Enter a valid name and price.");
+    v.name=name.trim();v.price=Number(price);v.location=location.trim();
+    save("rrVehicles",read("rrVehicles").map(x=>x.id===v.id?v:x));
+    dashboardPage("Manage Vehicles");
+}
+function toggleVehicle(vehicleId){
+    const vehicles=read("rrVehicles");
+    const v=vehicles.find(x=>x.id===vehicleId);
+    if(!v)return;
+    v.available=!v.available;
+    save("rrVehicles",vehicles);
+    dashboardPage("Manage Vehicles");
+}
+function updateProfile(e){
+    e.preventDefault();
+    const u=requireUser();if(!u)return;
+    const f=new FormData(e.target),users=read("rrUsers");
+    const index=users.findIndex(x=>x.id===u.id);
+    users[index]={...users[index],name:f.get("name"),phone:f.get("phone"),address:f.get("address")};
+    save("rrUsers",users);setUser(users[index]);
+    notify("Profile updated successfully.");
+    dashboardPage("My Profile");
+}
+function addReview(e){
+    e.preventDefault();
+    const u=requireUser();if(!u)return;
+    const f=new FormData(e.target),reviews=read("rrReviews");
+    reviews.unshift({id:makeId(),userId:u.id,name:u.name,rating:Number(f.get("rating")),text:f.get("text"),date:new Date().toLocaleDateString()});
+    save("rrReviews",reviews);
+    notify("Review submitted successfully.");
+    dashboardPage("Reviews");
+}
+function reviewsHTML(){
+    const reviews=read("rrReviews");
+    return reviews.length?`<div class="grid">${reviews.map(r=>`<div class="card"><h3>${escapeHTML(r.name)}</h3><div class="rating">${"★".repeat(r.rating)}${"☆".repeat(5-r.rating)}</div><p>${escapeHTML(r.text)}</p><p class="small">${escapeHTML(r.date)}</p></div>`).join("")}</div>`:"<p>No reviews yet. Be the first to share your experience.</p>";
+}
+function showReviews(){
+    $("app").innerHTML=`<div class="container"><h2 class="section-title">Customer Reviews</h2>${reviewsHTML()}<br><button class="btn" onclick="showLogin()">Login to Write a Review</button></div>`;
+}
+
+showHome();
+</script>
+</body>
+</html>
+```
