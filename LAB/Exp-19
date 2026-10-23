@@ -1,0 +1,717 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VETCURE | Veterinary Care</title>
+
+<style>
+:root{
+    --green:#176b45;
+    --dark:#104b33;
+    --light:#e9f5ec;
+    --orange:#f47721;
+    --cream:#fff8ef;
+    --white:#ffffff;
+    --text:#263b32;
+    --muted:#718078;
+    --border:#dce8df;
+    --red:#d94841;
+}
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--cream);
+    color:var(--text);
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+header{
+    background:white;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:15px 5%;
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+.logo{
+    color:var(--green);
+    font-size:25px;
+    font-weight:bold;
+}
+.logo span{color:var(--orange)}
+nav{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+nav button{
+    background:none;border:none;color:var(--text);font-size:14px
+}
+nav button:hover{color:var(--orange)}
+.btn{
+    border:none;
+    border-radius:7px;
+    padding:11px 17px;
+    background:var(--orange);
+    color:white;
+    font-weight:bold;
+}
+.btn:hover{opacity:.9}
+.btn-green{background:var(--green)}
+.btn-light{background:var(--light);color:var(--green)}
+.btn-danger{background:var(--red)}
+.container{max-width:1200px;margin:auto;padding:25px}
+.hero{
+    min-height:380px;
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:30px;
+    align-items:center;
+    padding:55px 7%;
+    background:linear-gradient(120deg,#fff8ef,#e8f5e9);
+}
+.hero h1{font-size:43px;color:var(--dark);margin:12px 0}
+.hero p{font-size:17px;line-height:1.7;color:#53685c}
+.hero .tag{color:var(--orange);font-weight:bold}
+.hero-visual{
+    background:#d9eedc;
+    min-height:270px;
+    border-radius:45% 35% 40% 30%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:110px;
+}
+.features,.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:18px;
+}
+.features{padding:35px 5%;background:white}
+.feature,.card{
+    background:white;
+    padding:22px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    box-shadow:0 3px 12px #12331b08;
+}
+.feature{text-align:center}
+.feature .icon{font-size:32px}
+section{padding:25px 0}
+.section-title{color:var(--dark);margin-top:0}
+.card h3{margin-top:5px;color:var(--green)}
+.card p{line-height:1.6;color:var(--muted)}
+.card .btn{margin-top:8px}
+.form-card{
+    max-width:650px;
+    margin:30px auto;
+    padding:28px;
+    background:white;
+    border-radius:14px;
+    border:1px solid var(--border);
+}
+.form-card h2{color:var(--green);margin-top:0}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.field{margin-bottom:15px}
+.field label{display:block;margin-bottom:7px;font-weight:bold;font-size:13px}
+input,select,textarea{
+    width:100%;
+    padding:11px;
+    border:1px solid #d4e1d7;
+    border-radius:7px;
+    background:white;
+    outline:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--green)}
+textarea{resize:vertical;min-height:85px}
+.full{grid-column:1/-1}
+.hidden{display:none!important}
+.layout{
+    display:grid;
+    grid-template-columns:225px 1fr;
+    min-height:75vh;
+}
+.sidebar{background:white;border-right:1px solid var(--border);padding:18px}
+.sidebar h3{color:var(--green)}
+.sidebar button{
+    width:100%;
+    padding:12px;
+    margin:3px 0;
+    text-align:left;
+    background:white;
+    border:none;
+    border-radius:6px;
+    color:var(--text);
+}
+.sidebar button:hover,.sidebar button.active{
+    background:var(--green);color:white
+}
+.dashboard-content{padding:25px;min-width:0}
+.stat{
+    background:white;
+    padding:20px;
+    border:1px solid var(--border);
+    border-radius:10px;
+}
+.stat strong{display:block;font-size:26px;color:var(--green);margin-top:8px}
+table{width:100%;border-collapse:collapse;background:white;min-width:600px}
+th,td{padding:13px;text-align:left;border-bottom:1px solid var(--border);font-size:13px}
+th{background:var(--light);color:var(--dark)}
+.table-wrap{overflow-x:auto;border-radius:8px}
+.badge{padding:5px 9px;border-radius:15px;background:#fff0d7;color:#9a5a00;font-size:12px}
+.badge.resolved{background:#d9f5e2;color:#176b45}
+.badge.progress{background:#fff0d7;color:#9a5a00}
+.badge.pending{background:#ffe0e0;color:#b83232}
+.card img{width:100%;height:150px;object-fit:cover;border-radius:8px}
+.notice{padding:12px;background:var(--light);border-radius:7px;margin-bottom:15px}
+footer{
+    text-align:center;background:var(--dark);color:white;padding:25px;margin-top:30px
+}
+.small{font-size:12px;color:var(--muted)}
+hr{border:none;border-top:1px solid var(--border);margin:20px 0}
+@media(max-width:750px){
+    header{align-items:flex-start;gap:12px;flex-direction:column}
+    nav{gap:10px}
+    .hero{grid-template-columns:1fr;padding:35px 7%}
+    .hero h1{font-size:32px}
+    .hero-visual{min-height:170px;font-size:75px}
+    .layout{grid-template-columns:1fr}
+    .sidebar{border-right:none;border-bottom:1px solid var(--border)}
+    .sidebar button{width:auto;display:inline-block}
+    .form-grid{grid-template-columns:1fr}
+    .full{grid-column:auto}
+    .dashboard-content{padding:15px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🐾 VET<span>CURE</span></div>
+    <nav id="topNav">
+        <button onclick="showHome()">Home</button>
+        <button onclick="showDiseases()">Diseases</button>
+        <button onclick="showNews()">News</button>
+        <button onclick="showDoctors()">Doctors</button>
+        <button onclick="showLogin()">Login</button>
+        <button class="btn" onclick="showRegister()">Register</button>
+    </nav>
+</header>
+
+<main id="app"></main>
+
+<footer>
+    <h3>🐾 VETCURE</h3>
+    <p>Better Care for Healthier Animals</p>
+    <p class="small">Veterinary Consultation and Animal Health Management System</p>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+function read(key, fallback=[]){
+    try{return JSON.parse(localStorage.getItem(key)) || fallback}
+    catch(e){return fallback}
+}
+function save(key,value){
+    localStorage.setItem(key,JSON.stringify(value));
+}
+function escapeHTML(value){
+    return String(value ?? "").replace(/[&<>"']/g,c=>({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[c]));
+}
+function message(text){
+    alert(text);
+}
+function currentUser(){
+    return JSON.parse(sessionStorage.getItem("vetcureUser") || "null");
+}
+function setUser(user){
+    sessionStorage.setItem("vetcureUser",JSON.stringify(user));
+}
+function logout(){
+    sessionStorage.removeItem("vetcureUser");
+    showHome();
+}
+function id(){
+    return Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+}
+function seedData(){
+    if(!localStorage.getItem("vcUsers")){
+        save("vcUsers",[
+            {id:id(),name:"Demo Farmer",email:"farmer@gmail.com",password:"farmer123",role:"farmer",phone:"9876543210",address:"Demo Village"},
+            {id:id(),name:"Dr. Ahmed Khan",email:"doctor@gmail.com",password:"doctor123",role:"doctor",phone:"9876501234",address:"City Veterinary Clinic",speciality:"General Veterinary Care",clinic:"Private Clinic",fee:300,bank:"Demo Bank Account",easypaisa:"03001234567"}
+        ]);
+    }
+    if(!localStorage.getItem("vcDiseases")){
+        save("vcDiseases",[
+            {name:"Foot and Mouth Disease",animal:"Cattle, buffalo, sheep",symptoms:"Fever, mouth blisters, excessive salivation and difficulty walking.",prescription:"Seek veterinary examination promptly. Isolate affected animals and follow the veterinarian's treatment and vaccination advice.",image:""},
+            {name:"Mastitis",animal:"Cows and buffaloes",symptoms:"Swollen udder, pain, abnormal milk and reduced milk production.",prescription:"Contact a veterinarian for testing and appropriate treatment. Maintain clean milking practices.",image:""},
+            {name:"Lumpy Skin Disease",animal:"Cattle",symptoms:"Skin nodules, fever and reduced appetite.",prescription:"Seek veterinary assessment, control insects and isolate affected animals as advised by a veterinarian.",image:""},
+            {name:"PPR",animal:"Goats and sheep",symptoms:"Fever, nasal discharge, mouth sores and diarrhoea.",prescription:"Contact a veterinarian promptly and separate sick animals from the herd.",image:""},
+            {name:"Heat Stress",animal:"Cattle, goats and pets",symptoms:"Rapid breathing, weakness and reduced appetite.",prescription:"Provide shade, clean water and ventilation. Seek urgent veterinary help if severe.",image:""},
+            {name:"Worm Infestation",animal:"Livestock and pets",symptoms:"Weight loss, poor growth and digestive problems.",prescription:"Ask a veterinarian about appropriate parasite testing and deworming.",image:""}
+        ]);
+    }
+    if(!localStorage.getItem("vcNews")){
+        save("vcNews",[
+            {title:"Animal Vaccination Awareness",body:"Keep animal vaccinations up to date with guidance from a qualified veterinarian."},
+            {title:"Summer Care for Livestock",body:"Provide shade, adequate drinking water and good ventilation during hot weather."},
+            {title:"Maintain Clean Animal Shelters",body:"Clean shelters and feeding areas regularly to support animal health."}
+        ]);
+    }
+    ["vcComplaints","vcFeedback","vcPayments"].forEach(k=>{
+        if(!localStorage.getItem(k))save(k,[]);
+    });
+}
+seedData();
+
+function showHome(){
+    $("app").innerHTML=`
+    <section class="hero">
+        <div>
+            <div class="tag">BETTER CARE FOR HEALTHIER ANIMALS</div>
+            <h1>Connect with Expert Veterinarians Online</h1>
+            <p>Send your animal's signs and symptoms through text, images, audio or video and receive guidance from a veterinarian.</p>
+            <button class="btn" onclick="showRegister()">Get Started</button>
+            <button class="btn btn-green" onclick="showDoctors()">View Doctors</button>
+        </div>
+        <div class="hero-visual">🐄 🐐 🐕</div>
+    </section>
+    <div class="features">
+        <div class="feature"><div class="icon">🎥</div><h3>Online Consultation</h3><p>Text, audio, image and video submissions.</p></div>
+        <div class="feature"><div class="icon">🩺</div><h3>Expert Doctors</h3><p>Find government and private veterinarians.</p></div>
+        <div class="feature"><div class="icon">💳</div><h3>Easy Payments</h3><p>View consultation fees and payment details.</p></div>
+        <div class="feature"><div class="icon">📊</div><h3>Disease Reports</h3><p>Explore recorded complaints and area trends.</p></div>
+    </div>
+    <div class="container">
+        <section><h2 class="section-title">How VETCURE Works</h2>
+            <div class="grid">
+                <div class="card"><h3>1. Register</h3><p>Create a farmer account to access consultation services.</p></div>
+                <div class="card"><h3>2. Post Complaint</h3><p>Describe symptoms and attach available media files.</p></div>
+                <div class="card"><h3>3. Doctor Response</h3><p>Check your complaint status and the doctor's response.</p></div>
+            </div>
+        </section>
+        <section><h2 class="section-title">Common Animal Diseases</h2><div id="homeDiseases" class="grid"></div></section>
+    </div>`;
+    renderDiseaseCards("homeDiseases",3);
+}
+
+function showRegister(){
+    $("app").innerHTML=`
+    <div class="form-card">
+        <h2>Create Your VETCURE Account</h2>
+        <p>Register as a farmer or doctor.</p>
+        <form onsubmit="registerUser(event)">
+            <div class="form-grid">
+                <div class="field"><label>Full Name</label><input name="name" required></div>
+                <div class="field"><label>Phone Number</label><input name="phone" required></div>
+                <div class="field"><label>Email Address</label><input name="email" type="email" required></div>
+                <div class="field"><label>Account Type</label><select name="role" id="registerRole" onchange="toggleDoctorFields()" required><option value="farmer">Farmer / User</option><option value="doctor">Doctor</option></select></div>
+                <div class="field"><label>Password</label><input name="password" type="password" minlength="6" required></div>
+                <div class="field"><label>Confirm Password</label><input name="confirm" type="password" minlength="6" required></div>
+                <div class="field full"><label>Address / Clinic Address</label><textarea name="address" required></textarea></div>
+                <div class="field doctor-field hidden"><label>Speciality</label><input name="speciality" placeholder="Livestock, pets, general care"></div>
+                <div class="field doctor-field hidden"><label>Clinic Type</label><select name="clinic"><option>Government CVH</option><option>Private Clinic</option></select></div>
+                <div class="field doctor-field hidden"><label>Consultation Fee (₹)</label><input name="fee" type="number" min="0" value="0"></div>
+                <div class="field doctor-field hidden"><label>Bank Details</label><input name="bank" placeholder="Account holder / bank details"></div>
+                <div class="field doctor-field hidden"><label>EasyPaisa / Payment Account</label><input name="easypaisa" placeholder="Payment account details"></div>
+            </div>
+            <button class="btn" type="submit">Register</button>
+            <p>Already registered? <a href="#" onclick="showLogin();return false">Login</a></p>
+        </form>
+    </div>`;
+}
+function toggleDoctorFields(){
+    const doctor=$("registerRole").value==="doctor";
+    document.querySelectorAll(".doctor-field").forEach(el=>el.classList.toggle("hidden",!doctor));
+}
+function registerUser(e){
+    e.preventDefault();
+    const f=new FormData(e.target);
+    const name=f.get("name").trim();
+    const email=f.get("email").trim().toLowerCase();
+    const password=f.get("password");
+    if(password!==f.get("confirm"))return message("Passwords do not match.");
+    let users=read("vcUsers");
+    if(users.some(u=>u.email===email))return message("This email is already registered.");
+    const user={
+        id:id(),name,email,password,phone:f.get("phone"),
+        role:f.get("role"),address:f.get("address")
+    };
+    if(user.role==="doctor"){
+        Object.assign(user,{
+            speciality:f.get("speciality"),clinic:f.get("clinic"),
+            fee:Number(f.get("fee")||0),bank:f.get("bank"),
+            easypaisa:f.get("easypaisa")
+        });
+    }
+    users.push(user);save("vcUsers",users);
+    message("Registration successful. Please log in.");
+    showLogin();
+}
+function showLogin(){
+    $("app").innerHTML=`
+    <div class="form-card" style="max-width:450px">
+        <h2>Login to VETCURE</h2>
+        <p>Access your account and consultation dashboard.</p>
+        <form onsubmit="loginUser(event)">
+            <div class="field"><label>Email Address</label><input name="email" type="email" required></div>
+            <div class="field"><label>Password</label><input name="password" type="password" required></div>
+            <div class="field"><label>Login As</label><select name="role"><option value="farmer">Farmer / User</option><option value="doctor">Doctor</option></select></div>
+            <button class="btn" type="submit">Login</button>
+        </form>
+        <hr><p class="small">Demo Farmer: farmer@gmail.com / farmer123</p>
+        <p class="small">Demo Doctor: doctor@gmail.com / doctor123</p>
+        <p>New to VETCURE? <a href="#" onclick="showRegister();return false">Register here</a></p>
+    </div>`;
+}
+function loginUser(e){
+    e.preventDefault();
+    const f=new FormData(e.target);
+    const email=f.get("email").trim().toLowerCase();
+    const user=read("vcUsers").find(u=>u.email===email&&u.password===f.get("password")&&u.role===f.get("role"));
+    if(!user)return message("Invalid email, password or account type.");
+    setUser(user);
+    showDashboard();
+}
+function requireUser(){
+    const u=currentUser();
+    if(!u){message("Please log in first.");showLogin();return null;}
+    return u;
+}
+
+function showDashboard(page="Dashboard"){
+    const u=currentUser();
+    if(!u){showLogin();return;}
+    const doctor=u.role==="doctor";
+    const items=doctor?
+    ["Dashboard","View Complaint","Post Solution","Manage Cure","Manage News","View User Details","View Payment Details","Feedback Details","My Profile","Logout"]:
+    ["Dashboard","Post Complaint","My Complaint Status","View Vetcure Details","View News","View Doctor","View Report","Post Feedback","Make Payment","My Profile","Logout"];
+    $("app").innerHTML=`
+    <div class="layout">
+        <aside class="sidebar">
+            <h3>🐾 VETCURE</h3>
+            <p class="small">${doctor?"Doctor Panel":"Farmer Panel"}</p>
+            ${items.map(item=>`<button onclick="dashboardPage('${item}')" class="${item===page?'active':''}">${item}</button>`).join("")}
+        </aside>
+        <div class="dashboard-content" id="dashContent"></div>
+    </div>`;
+    dashboardPage(page);
+}
+function dashboardPage(page){
+    const u=requireUser();if(!u)return;
+    if(page==="Logout"){logout();return;}
+    const doctor=u.role==="doctor";
+    const complaints=read("vcComplaints");
+    const mine=doctor?complaints.filter(c=>c.doctorId===u.id):complaints.filter(c=>c.userId===u.id);
+    const allUsers=read("vcUsers");
+    let html="";
+    if(page==="Dashboard"){
+        html=`<h2>Welcome, ${escapeHTML(u.name)}</h2><p>Manage your animal healthcare services.</p>
+        <div class="grid">
+        <div class="stat">Total Complaints<strong>${doctor?complaints.filter(c=>c.doctorId===u.id).length:mine.length}</strong></div>
+        <div class="stat">In Progress<strong>${mine.filter(c=>c.status==="In Progress").length}</strong></div>
+        <div class="stat">Resolved<strong>${mine.filter(c=>c.status==="Resolved").length}</strong></div>
+        <div class="stat">Account Type<strong>${doctor?"Doctor":"Farmer"}</strong></div></div>
+        <section><h3>Quick Actions</h3><div class="grid">
+        ${doctor?`<div class="card"><h3>View Complaints</h3><button class="btn" onclick="dashboardPage('View Complaint')">Open</button></div>
+        <div class="card"><h3>Manage Cures</h3><button class="btn" onclick="dashboardPage('Manage Cure')">Open</button></div>`:
+        `<div class="card"><h3>Post Complaint</h3><button class="btn" onclick="dashboardPage('Post Complaint')">Submit</button></div>
+        <div class="card"><h3>Find a Doctor</h3><button class="btn" onclick="dashboardPage('View Doctor')">View Doctors</button></div>`}
+        </div></section>`;
+    }
+    else if(page==="Post Complaint"&&!doctor){
+        const docs=allUsers.filter(x=>x.role==="doctor");
+        html=`<h2>Post Animal Complaint</h2>
+        <div class="notice">Describe the animal's symptoms clearly. A veterinarian must assess the case before treatment is decided.</div>
+        <div class="form-card" style="max-width:none;margin:0">
+        <form onsubmit="submitComplaint(event)">
+        <div class="form-grid">
+        <div class="field"><label>Animal Type</label><select name="animal" required><option>Cow</option><option>Buffalo</option><option>Goat</option><option>Sheep</option><option>Dog</option><option>Cat</option><option>Other</option></select></div>
+        <div class="field"><label>Animal Age</label><input name="age" placeholder="e.g. 2 years"></div>
+        <div class="field"><label>Location / Village</label><input name="location" required value="${escapeHTML(u.address||"")}"></div>
+        <div class="field"><label>Select Doctor</label><select name="doctorId" required><option value="">Choose a doctor</option>${docs.map(d=>`<option value="${d.id}">${escapeHTML(d.name)} — ${escapeHTML(d.clinic||"Clinic")}</option>`).join("")}</select></div>
+        <div class="field full"><label>Signs and Symptoms</label><textarea name="symptoms" required placeholder="Describe symptoms, duration and changes in behaviour..."></textarea></div>
+        <div class="field full"><label>Upload Image (optional)</label><input type="file" name="image" accept="image/*" onchange="previewFile(this,'imagePreview')"><div id="imagePreview"></div></div>
+        <div class="field"><label>Upload Audio (optional)</label><input type="file" name="audio" accept="audio/*"></div>
+        <div class="field"><label>Upload Video (optional)</label><input type="file" name="video" accept="video/*"></div>
+        </div><button class="btn">Submit Complaint</button></form></div>`;
+    }
+    else if(page==="My Complaint Status"&&!doctor){
+        html=`<h2>My Complaint Status</h2>${complaintTable(mine,false)}`;
+    }
+    else if(page==="View Complaint"&&doctor){
+        html=`<h2>Farmer Complaints</h2>${complaintTable(mine,true)}`;
+    }
+    else if(page==="Post Solution"&&doctor){
+        const c=complaints.filter(c=>c.doctorId===u.id);
+        html=`<h2>Post Doctor Solution</h2><form class="form-card" style="max-width:none;margin:0" onsubmit="postSolution(event)">
+        <div class="field"><label>Select Complaint</label><select name="complaintId" required>${c.map(x=>`<option value="${x.id}">${escapeHTML(x.animal)} — ${escapeHTML(x.symptoms.slice(0,55))}</option>`).join("")}</select></div>
+        <div class="field"><label>Medical Advice / Solution</label><textarea name="solution" required></textarea></div>
+        <div class="field"><label>Update Status</label><select name="status"><option>In Progress</option><option>Resolved</option></select></div>
+        <button class="btn">Submit Solution</button></form>`;
+    }
+    else if(page==="View Vetcure Details"&&!doctor){
+        html=`<h2>About VETCURE</h2><div class="card"><h3>Veterinary Consultation Platform</h3><p>VETCURE connects farmers with veterinary doctors for animal health consultations. Farmers can submit symptoms and media files, track complaints, access animal health information, and view local disease trends.</p><p>Government CVH services may be free, while private doctors may charge consultation fees according to their profile.</p></div>`;
+    }
+    else if(page==="View News"&&!doctor){
+        html=`<h2>Latest Animal Health News</h2><div class="grid">${newsCards()}</div>`;
+    }
+    else if(page==="View Doctor"&&!doctor){
+        html=`<h2>Available Doctors</h2><div class="grid">${doctorCards()}</div>`;
+    }
+    else if(page==="View Report"&&!doctor){
+        html=`<h2>Area-Wise Disease Report</h2><p>Summary based on complaints recorded in this browser demo.</p>${reportHTML()}`;
+    }
+    else if(page==="Post Feedback"&&!doctor){
+        html=`<h2>Post Feedback</h2><form class="form-card" style="max-width:none;margin:0" onsubmit="submitFeedback(event)">
+        <div class="field"><label>Rating</label><select name="rating"><option>5 - Excellent</option><option>4 - Very Good</option><option>3 - Good</option><option>2 - Fair</option><option>1 - Poor</option></select></div>
+        <div class="field"><label>Feedback</label><textarea name="text" required></textarea></div><button class="btn">Submit Feedback</button></form>`;
+    }
+    else if(page==="Make Payment"&&!doctor){
+        html=`<h2>Make Payment</h2><div class="notice">Government CVH consultations can be marked as free. Private clinic payments shown here are demo records; no money will be transferred.</div>
+        <form class="form-card" style="max-width:none;margin:0" onsubmit="makePayment(event)">
+        <div class="field"><label>Choose Doctor</label><select name="doctorId" required onchange="showDoctorPayment(this.value)"><option value="">Select doctor</option>${allUsers.filter(x=>x.role==="doctor").map(d=>`<option value="${d.id}">${escapeHTML(d.name)} — ${escapeHTML(d.clinic||"Clinic")} — ₹${Number(d.fee||0)}</option>`).join("")}</select></div>
+        <div id="doctorPayment" class="notice">Select a doctor to view consultation and payment details.</div>
+        <div class="field"><label>Payment Method</label><select name="method"><option>Bank Transfer</option><option>EasyPaisa</option></select></div>
+        <button class="btn">Record Demo Payment</button></form>
+        <h3>My Payment History</h3>${paymentTable(read("vcPayments").filter(p=>p.userId===u.id))}`;
+    }
+    else if(page==="Manage Cure"&&doctor){
+        html=`<h2>Manage Animal Cures</h2>
+        <form class="form-card" style="max-width:none;margin:0 0 20px" onsubmit="addDisease(event)">
+        <div class="form-grid">
+        <div class="field"><label>Disease Name</label><input name="name" required></div>
+        <div class="field"><label>Affected Animals</label><input name="animal" required></div>
+        <div class="field full"><label>Symptoms</label><textarea name="symptoms" required></textarea></div>
+        <div class="field full"><label>General Care Information</label><textarea name="prescription" required></textarea></div>
+        </div><button class="btn">Add Disease Information</button></form>
+        <div class="grid">${diseaseCardsHTML()}</div>`;
+    }
+    else if(page==="Manage News"&&doctor){
+        html=`<h2>Manage News</h2><form class="form-card" style="max-width:none;margin:0 0 20px" onsubmit="addNews(event)">
+        <div class="field"><label>News Title</label><input name="title" required></div>
+        <div class="field"><label>News Content</label><textarea name="body" required></textarea></div>
+        <button class="btn">Publish News</button></form><div class="grid">${newsCards(true)}</div>`;
+    }
+    else if(page==="View User Details"&&doctor){
+        html=`<h2>Registered Farmers / Users</h2>${usersTable(allUsers.filter(x=>x.role==="farmer"))}`;
+    }
+    else if(page==="View Payment Details"&&doctor){
+        html=`<h2>Payment Details</h2>${paymentTable(read("vcPayments"))}<h3>My Payment Account Information</h3><div class="card"><p><b>Bank:</b> ${escapeHTML(u.bank||"Not provided")}</p><p><b>EasyPaisa:</b> ${escapeHTML(u.easypaisa||"Not provided")}</p></div>`;
+    }
+    else if(page==="Feedback Details"&&doctor){
+        const fb=read("vcFeedback");
+        html=`<h2>Farmer Feedback</h2>${fb.length?`<div class="grid">${fb.map(f=>`<div class="card"><h3>${escapeHTML(f.userName)}</h3><p>${escapeHTML(f.rating)}</p><p>${escapeHTML(f.text)}</p></div>`).join("")}</div>`:"<p>No feedback received yet.</p>"}`;
+    }
+    else if(page==="My Profile"){
+        html=`<h2>My Profile</h2><form class="form-card" style="max-width:none;margin:0" onsubmit="updateProfile(event)">
+        <div class="form-grid">
+        <div class="field"><label>Full Name</label><input name="name" required value="${escapeHTML(u.name)}"></div>
+        <div class="field"><label>Phone</label><input name="phone" value="${escapeHTML(u.phone||"")}"></div>
+        <div class="field full"><label>Email</label><input value="${escapeHTML(u.email)}" disabled></div>
+        <div class="field full"><label>Address / Clinic Address</label><textarea name="address">${escapeHTML(u.address||"")}</textarea></div>
+        ${doctor?`<div class="field"><label>Speciality</label><input name="speciality" value="${escapeHTML(u.speciality||"")}"></div>
+        <div class="field"><label>Clinic Type</label><select name="clinic"><option ${u.clinic==="Government CVH"?"selected":""}>Government CVH</option><option ${u.clinic==="Private Clinic"?"selected":""}>Private Clinic</option></select></div>
+        <div class="field"><label>Consultation Fee (₹)</label><input name="fee" type="number" min="0" value="${Number(u.fee||0)}"></div>
+        <div class="field"><label>Bank Details</label><input name="bank" value="${escapeHTML(u.bank||"")}"></div>
+        <div class="field full"><label>EasyPaisa Account</label><input name="easypaisa" value="${escapeHTML(u.easypaisa||"")}"></div>`:""}
+        </div><button class="btn">Update Profile</button></form>`;
+    }
+    else{
+        html=`<h2>${escapeHTML(page)}</h2><p>This section is available for the relevant account type.</p>`;
+    }
+    $("dashContent").innerHTML=html;
+}
+
+function previewFile(input,target){
+    const file=input.files[0];
+    if(!file)return;
+    if(file.size>3*1024*1024){
+        message("For this browser demo, choose a file smaller than 3 MB.");
+        input.value="";
+        return;
+    }
+    if(file.type.startsWith("image/")){
+        const reader=new FileReader();
+        reader.onload=()=>$(target).innerHTML=`<img src="${reader.result}" alt="Selected animal" style="max-width:150px;max-height:120px;margin-top:10px;border-radius:8px">`;
+        reader.readAsDataURL(file);
+    }
+}
+function submitComplaint(e){
+    e.preventDefault();
+    const u=requireUser();if(!u)return;
+    const f=new FormData(e.target);
+    const image=e.target.elements.image.files[0];
+    const audio=e.target.elements.audio.files[0];
+    const video=e.target.elements.video.files[0];
+    if([image,audio,video].some(file=>file&&file.size>3*1024*1024)){
+        return message("Each uploaded file must be under 3 MB in this demo.");
+    }
+    const complaint={
+        id:id(),userId:u.id,userName:u.name,doctorId:f.get("doctorId"),
+        animal:f.get("animal"),age:f.get("age"),location:f.get("location"),
+        symptoms:f.get("symptoms"),status:"Pending",solution:"",
+        date:new Date().toLocaleDateString(),imageName:image?.name||"",
+        audioName:audio?.name||"",videoName:video?.name||""
+    };
+    const complaints=read("vcComplaints");complaints.push(complaint);save("vcComplaints",complaints);
+    message("Complaint submitted successfully.");
+    dashboardPage("My Complaint Status");
+}
+function complaintTable(list,doctor){
+    if(!list.length)return "<p>No complaints found.</p>";
+    return `<div class="table-wrap"><table><thead><tr><th>Animal</th><th>${doctor?"Farmer":"Symptoms"}</th><th>Date</th><th>Status</th><th>Files</th>${doctor?"<th>Action</th>":"<th>Doctor Response</th>"}</tr></thead><tbody>
+    ${list.map(c=>`<tr><td>${escapeHTML(c.animal)}</td><td>${escapeHTML(doctor?c.userName:c.symptoms)}</td><td>${escapeHTML(c.date)}</td><td><span class="badge ${c.status==="Resolved"?"resolved":c.status==="In Progress"?"progress":"pending"}">${escapeHTML(c.status)}</span></td><td>${escapeHTML([c.imageName,c.audioName,c.videoName].filter(Boolean).join(", ")||"None")}</td><td>${doctor?`<button class="btn btn-green" onclick="respondToComplaint('${c.id}')">Respond</button>`:escapeHTML(c.solution||"Awaiting doctor response")}</td></tr>`).join("")}
+    </tbody></table></div>`;
+}
+function respondToComplaint(complaintId){
+    const c=read("vcComplaints").find(x=>x.id===complaintId);
+    if(!c)return;
+    const solution=prompt("Enter veterinary advice / solution:");
+    if(!solution||!solution.trim())return;
+    c.solution=solution.trim();
+    c.status="In Progress";
+    const status=confirm("Mark this complaint as Resolved? Click Cancel to keep In Progress.");
+    if(status)c.status="Resolved";
+    save("vcComplaints",read("vcComplaints").map(x=>x.id===c.id?c:x));
+    dashboardPage("View Complaint");
+}
+function postSolution(e){
+    e.preventDefault();
+    const f=new FormData(e.target);
+    const complaints=read("vcComplaints");
+    const c=complaints.find(x=>x.id===f.get("complaintId"));
+    if(!c)return message("No complaint selected.");
+    c.solution=f.get("solution");c.status=f.get("status");
+    save("vcComplaints",complaints);
+    message("Solution submitted.");
+    dashboardPage("View Complaint");
+}
+function updateProfile(e){
+    e.preventDefault();
+    const u=requireUser();if(!u)return;
+    const f=new FormData(e.target);
+    const users=read("vcUsers");
+    const index=users.findIndex(x=>x.id===u.id);
+    if(index<0)return;
+    users[index]={...users[index],name:f.get("name"),phone:f.get("phone"),address:f.get("address")};
+    if(u.role==="doctor"){
+        Object.assign(users[index],{
+            speciality:f.get("speciality"),clinic:f.get("clinic"),
+            fee:Number(f.get("fee")||0),bank:f.get("bank"),easypaisa:f.get("easypaisa")
+        });
+    }
+    save("vcUsers",users);setUser(users[index]);
+    message("Profile updated successfully.");dashboardPage("My Profile");
+}
+function submitFeedback(e){
+    e.preventDefault();
+    const u=requireUser();if(!u)return;
+    const f=new FormData(e.target),items=read("vcFeedback");
+    items.push({id:id(),userId:u.id,userName:u.name,rating:f.get("rating"),text:f.get("text"),date:new Date().toLocaleDateString()});
+    save("vcFeedback",items);message("Feedback submitted.");dashboardPage();
+}
+function showDoctorPayment(doctorId){
+    const d=read("vcUsers").find(x=>x.id===doctorId);
+    $("doctorPayment").innerHTML=!d?"Select a doctor.":`<b>${escapeHTML(d.name)}</b><br>Clinic: ${escapeHTML(d.clinic||"Not specified")}<br>Consultation Fee: ₹${Number(d.clinic==="Government CVH"?0:d.fee||0)}<br>Bank Details: ${escapeHTML(d.bank||"Ask the doctor")}<br>EasyPaisa: ${escapeHTML(d.easypaisa||"Ask the doctor")}`;
+}
+function makePayment(e){
+    e.preventDefault();
+    const u=requireUser();if(!u)return;
+    const f=new FormData(e.target),d=read("vcUsers").find(x=>x.id===f.get("doctorId"));
+    if(!d)return message("Please select a doctor.");
+    const amount=d.clinic==="Government CVH"?0:Number(d.fee||0);
+    const payments=read("vcPayments");
+    payments.push({id:id(),userId:u.id,userName:u.name,doctorId:d.id,doctorName:d.name,amount,method:f.get("method"),status:amount===0?"Free service — demo":"Demo payment recorded",date:new Date().toLocaleDateString()});
+    save("vcPayments",payments);
+    message("Demo payment record created. No real money was transferred.");
+    dashboardPage("Make Payment");
+}
+function paymentTable(list){
+    if(!list.length)return "<p>No payment records found.</p>";
+    return `<div class="table-wrap"><table><thead><tr><th>User</th><th>Doctor</th><th>Amount</th><th>Method</th><th>Status</th><th>Date</th></tr></thead><tbody>${list.map(p=>`<tr><td>${escapeHTML(p.userName)}</td><td>${escapeHTML(p.doctorName)}</td><td>₹${Number(p.amount)}</td><td>${escapeHTML(p.method)}</td><td>${escapeHTML(p.status)}</td><td>${escapeHTML(p.date)}</td></tr>`).join("")}</tbody></table></div>`;
+}
+function usersTable(list){
+    if(!list.length)return "<p>No users registered yet.</p>";
+    return `<div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Address</th></tr></thead><tbody>${list.map(u=>`<tr><td>${escapeHTML(u.name)}</td><td>${escapeHTML(u.email)}</td><td>${escapeHTML(u.phone||"")}</td><td>${escapeHTML(u.address||"")}</td></tr>`).join("")}</tbody></table></div>`;
+}
+function addDisease(e){
+    e.preventDefault();
+    const u=requireUser();if(!u)return;
+    const f=new FormData(e.target),items=read("vcDiseases");
+    items.push({name:f.get("name"),animal:f.get("animal"),symptoms:f.get("symptoms"),prescription:f.get("prescription"),image:""});
+    save("vcDiseases",items);message("Disease information added.");dashboardPage("Manage Cure");
+}
+function addNews(e){
+    e.preventDefault();
+    const f=new FormData(e.target),items=read("vcNews");
+    items.unshift({title:f.get("title"),body:f.get("body")});
+    save("vcNews",items);message("News published.");dashboardPage("Manage News");
+}
+function newsCards(manage=false){
+    const news=read("vcNews");
+    return news.map((n,i)=>`<div class="card"><h3>${escapeHTML(n.title)}</h3><p>${escapeHTML(n.body)}</p>${manage?`<button class="btn btn-danger" onclick="deleteNews(${i})">Delete</button>`:""}</div>`).join("")||"<p>No news available.</p>";
+}
+function deleteNews(i){
+    const n=read("vcNews");n.splice(i,1);save("vcNews",n);dashboardPage("Manage News");
+}
+function doctorCards(){
+    const doctors=read("vcUsers").filter(u=>u.role==="doctor");
+    return doctors.map(d=>`<div class="card"><div style="font-size:48px">🩺</div><h3>${escapeHTML(d.name)}</h3><p>${escapeHTML(d.speciality||"Veterinary Doctor")}</p><p>${escapeHTML(d.clinic||"Clinic")}</p><p>Consultation fee: ₹${Number(d.clinic==="Government CVH"?0:d.fee||0)}</p><p>📍 ${escapeHTML(d.address||"")}</p><button class="btn btn-green" onclick="chooseDoctor('${d.id}')">Consult Doctor</button></div>`).join("")||"<p>No doctors registered yet.</p>";
+}
+function chooseDoctor(doctorId){
+    const u=currentUser();
+    if(!u){showLogin();return;}
+    if(u.role!=="farmer")return message("Only farmer accounts can submit complaints.");
+    dashboardPage("Post Complaint");
+    setTimeout(()=>{
+        const select=document.querySelector('[name="doctorId"]');
+        if(select)select.value=doctorId;
+    },0);
+}
+function diseaseCardsHTML(){
+    return read("vcDiseases").map((d,i)=>`<div class="card"><h3>${escapeHTML(d.name)}</h3><p><b>Animals:</b> ${escapeHTML(d.animal)}</p><p><b>Symptoms:</b> ${escapeHTML(d.symptoms)}</p><p><b>Care:</b> ${escapeHTML(d.prescription)}</p><button class="btn btn-danger" onclick="deleteDisease(${i})">Delete</button></div>`).join("");
+}
+function deleteDisease(i){
+    const d=read("vcDiseases");d.splice(i,1);save("vcDiseases",d);dashboardPage("Manage Cure");
+}
+function renderDiseaseCards(target,limit=100){
+    const diseases=read("vcDiseases").slice(0,limit);
+    $(target).innerHTML=diseases.map(d=>`<div class="card"><div style="font-size:40px">🐄</div><h3>${escapeHTML(d.name)}</h3><p><b>Animals:</b> ${escapeHTML(d.animal)}</p><p>${escapeHTML(d.symptoms)}</p><button class="btn btn-green" onclick="showDiseaseDetail('${encodeURIComponent(d.name)}')">View Details</button></div>`).join("");
+}
+function showDiseaseDetail(encoded){
+    const name=decodeURIComponent(encoded);
+    const d=read("vcDiseases").find(x=>x.name===name);
+    if(!d)return;
+    $("app").innerHTML=`<div class="container"><button class="btn btn-light" onclick="showDiseases()">← Back to Diseases</button><div class="card" style="margin-top:20px"><h2>${escapeHTML(d.name)}</h2><p><b>Commonly affected animals:</b> ${escapeHTML(d.animal)}</p><p><b>Signs and symptoms:</b> ${escapeHTML(d.symptoms)}</p><p><b>General care guidance:</b> ${escapeHTML(d.prescription)}</p><div class="notice">This information is educational and is not a substitute for examination by a qualified veterinarian.</div></div></div>`;
+}
+function showDiseases(){
+    $("app").innerHTML=`<div class="container"><h2 class="section-title">Common Animal Diseases</h2><p>Learn about common animal health problems and general care information.</p><div class="grid" id="allDiseases"></div></div>`;
+    renderDiseaseCards("allDiseases");
+}
+function showNews(){
+    $("app").innerHTML=`<div class="container"><h2 class="section-title">Latest Veterinary News</h2><div class="grid">${newsCards()}</div></div>`;
+}
+function showDoctors(){
+    $("app").innerHTML=`<div class="container"><h2 class="section-title">Our Veterinary Doctors</h2><p>Register or log in to submit a consultation request.</p><div class="grid">${doctorCards()}</div></div>`;
+}
+function reportHTML(){
+    const complaints=read("vcComplaints");
+    if(!complaints.length)return "<p>No complaint records available yet. Reports will appear after complaints are submitted.</p>";
+    const counts={};
+    complaints.forEach(c=>counts[c.animal]=(counts[c.animal]||0)+1);
+    const max=Math.max(...Object.values(counts),1);
+    return `<div class="card"><h3>Complaints by Animal Type</h3>${Object.entries(counts).map(([name,count])=>`<p>${escapeHTML(name)} — ${count}</p><div style="height:12px;background:#e6eee8;border-radius:8px;margin-bottom:12px"><div style="height:12px;width:${count/max*100}%;background:var(--green);border-radius:8px"></div></div>`).join("")}</div><div class="card" style="margin-top:15px"><h3>Total Recorded Complaints: ${complaints.length}</h3><p>These are browser-demo records, not verified regional disease statistics.</p></div>`;
+}
+
+showHome();
+</script>
+</body>
+</html>
+```
